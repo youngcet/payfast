@@ -5,6 +5,8 @@ class Constants {
   static const String sandBoxUrl = 'https://sandbox.payfast.co.za';
 
   // Onsite Payfast APIs
-  static const String onsitePaymentLiveEndpoint = 'https://www.payfast.co.za/onsite/process';
-  static const String onsitePaymentSandboxEndpoint = 'https://sandbox.payfast.co.za/onsite/process';
+  static const String onsitePaymentLiveEndpoint =
+      'https://www.payfast.co.za/onsite/process';
+  static const String onsitePaymentSandboxEndpoint =
+      'https://sandbox.payfast.co.za/onsite/process';
 }
