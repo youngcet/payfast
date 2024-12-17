@@ -216,6 +216,17 @@ To point to a live server, simply change `<script src="https://sandbox.payfast.c
 
 We have to host the file because for security reasons 'Onsite Payments' requires that your application be served over HTTPS. For more detailed documentation, please refer to the official [PayFast Onsite Payments documentation](https://developers.payfast.co.za/docs#onsite_payments). 
 
+Onsite Sandbox sample:
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/sandbox.png?raw=true" alt="Sandbox Screenshot" width="280"/>
+
+
+Onsite Live sample:
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/live.png?raw=true" alt="Live Screenshot" width="280"/>
+
+
+
 ## Usage
 
 Install the library to your project by running: 
@@ -359,9 +370,6 @@ The code above will show you the screen below:
 
 <img src="https://github.com/youngcet/payfast/blob/main/doc/basic_app_screenshot.png?raw=true" alt="Basic App Screenshot" width="280"/>
 
-A live example:
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/live.png?raw=true" alt="Live Screenshot" width="280"/>
 
 ## Features
 

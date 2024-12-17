@@ -1,3 +1,7 @@
+## 0.0.2
+
+- Specified platforms in pubspec file, pub dev failing to identify the platforms
+
 ## 0.0.1
 
 ## Features
