@@ -36,7 +36,7 @@ A Flutter package to integrate PayFast payments into your app.
 
 <div align="left">
   <video width="400" height="800" controls>
-    <source src="https://github.com/youngcet/payfast/blob/main/doc/demo.mp4" type="video/mp4">
+    <source src="https://permanentlink.co.za/payment/demo.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 </div>
