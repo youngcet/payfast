@@ -9,4 +9,7 @@ class Constants {
       'https://www.payfast.co.za/onsite/process';
   static const String onsitePaymentSandboxEndpoint =
       'https://sandbox.payfast.co.za/onsite/process';
+  
+  static const String completed = 'completed';
+  static const String closed = 'closed';
 }

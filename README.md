@@ -30,6 +30,18 @@ A Flutter package to integrate PayFast payments into your app.
   * [Customizable Payment Button](#customizable-payment-button)
   * [Customizable Waiting Overlay Widget](#customizable-waiting-overlay-widget)
 - [Properties](#properties)
+  * [passPhrase](#passphrase)
+  * [useSandBox](#usesandbox)
+  * [data](#data)
+  * [onsiteActivationScriptUrl](#onsiteactivationscripturl)
+  * [onPaymentCompleted](#onpaymentcompleted)
+  * [onPaymentCancelled](#onpaymentcancelled)
+  * [paymentSumarryWidget](#paymentsumarrywidget)
+  * [payButtonStyle](#paybuttonstyle)
+  * [payButtonText](#paybuttontext)
+  * [paymentCompletedWidget](#paymentcompletedwidget)
+  * [paymentCancelledWidget](#paymentcancelledwidget)
+  * [waitingOverlayWidget](#waitingoverlaywidget)
 
 
 ### Demo
@@ -413,10 +425,15 @@ You can change the default text of the default widgets using `onPaymentCompleted
 ```dart
 PayFast(
     ...
-    onPaymentCompletedText: // add your text here,
-    onPaymentCancelledText: // add your text here ,
+    onPaymentCancelledText: 'This payment was cancelled!',
+    onPaymentCompletedText: 'Payment received - woohoo!',
 ) 
 ```
+
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_text.png?raw=true" alt="Payment Completed Text" width="280"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_text.png?raw=true" alt="Payment Cancelled Text" width="280"/>
+
 
 Alternatively, you can override the widgets with your own widget:
 
@@ -427,16 +444,127 @@ Alternatively, you can override the widgets with your own widget:
 ```dart
 PayFast(
     ...
-    paymentCompletedWidget: // add your widget here,
-    paymentCancelledWidget: // add your widget here ,
+    ...
+    paymentCompletedWidget: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Payment Completed Successfully!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: (){
+            // callback function
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+            backgroundColor: Colors.teal,
+          ),
+          child: const Text(
+            'Continue',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    ),
+    paymentCancelledWidget: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Payment Cancelled!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: (){
+            // callback function
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+            backgroundColor: Colors.red,
+          ),
+          child: const Text(
+            'Continue',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    ),
 ) 
 ```
 
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_widget.png?raw=true" alt="Payment Completed Widget" width="280"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_widget.png?raw=true" alt="Payment Cancelled Widget" width="280"/>
+
+
 ### Customizable Payment Summary Widget
 
-Provide a custom widget for displaying the payment summary with the `paymentSumarryWidget` property. This allows for full customization of the payment details display.
+Provide a custom widget for displaying the payment summary with the `paymentSumarryWidget` property. This allows for full customization of the payment details display. Only the highlighted section can be replaced with a custom widget.
 
-<img src="https://github.com/youngcet/payfast/blob/main/doc/basic_app_screenshot.png?raw=true" alt="Payment Summary" width="280"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_summary.png?raw=true" alt="Payment Summary" width="280"/>
+
+
+
+Custom Payment Summary Widget
+
+```dart
+PayFast(
+    ...
+    ...
+    paymentSumarryWidget: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Order Summary',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, decoration: TextDecoration.none, color: Colors.black),
+        ),
+        const SizedBox(height: 10),
+        Card(
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: const [
+                ListTile(
+                  title: Text('Product 1'),
+                  trailing: Text('R20.00'),
+                ),
+                ListTile(
+                  title: Text('Product 2'),
+                  trailing: Text('R15.00'),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text(
+                    'Total',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: Text(
+                    'R35.00',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+) 
+```
+
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_summary_widget.png?raw=true" alt="Payment Summary Custom Widget" width="280"/>
 
 
 Or modify the default widget using the properties below:
@@ -446,10 +574,17 @@ Or modify the default widget using the properties below:
 ```dart
 PayFast(
     ...
-    paymentSummaryTitle: // add text here,
-    defaultPaymentSummaryIcon: // add icon here ,
+    paymentSummaryTitle: 'Order Summary',
+    defaultPaymentSummaryIcon: const Icon(
+      Icons.shopping_cart,
+      size: 50,
+      color: Colors.grey,
+    ),
 ) 
 ```
+
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_summary_text_icon.png?raw=true" alt="Payment Summary Custom Text & Icon" width="280"/>
 
 
 ### Customizable Payment Button
@@ -459,34 +594,79 @@ The `payButtonStyle` and `payButtonText` properties allow you to style the "Pay 
 ```dart
 PayFast(
     ...
-    payButtonText: // add text here,
-    payButtonStyle: // add styling here ,
+    payButtonText: 'Checkout >>',
+    payButtonStyle: ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      backgroundColor: Colors.black,
+      shadowColor: Colors.transparent,
+      textStyle: TextStyle(backgroundColor: Colors.black)
+    )
 ) 
 ```
+
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/customised_pay_button.png?raw=true" alt="Custom Pay Button" width="280"/>
+
+
 
 ### Customizable Waiting Overlay Widget
 
 Show a custom loading spinner during the payment process with the `waitingOverlayWidget` property, helping users understand that a process is ongoing.
 
-```dart
-PayFast(
-    ...
-    waitingOverlayWidget: // add your widget here,
-) 
-```
 
 <img src="https://github.com/youngcet/payfast/blob/main/doc/waitingoverlay.png?raw=true" alt="Waiting Overlay Widget" width="280"/>
 
 
+
+Custom waitingOverlayWidget:
+
+
+
+```dart
+PayFast(
+    ...
+    waitingOverlayWidget: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 20), // Optional spacing from the top
+        const Icon(
+          Icons.wallet,
+          size: 50,
+          color: Colors.grey,
+        ),
+        const SizedBox(height: 20),
+        const Text(
+          'Please wait...',
+          style: TextStyle(
+            fontSize: 16,
+            decoration: TextDecoration.none,
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+) 
+```
+
+
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/waiting_overlay_widget.png?raw=true" alt="Waiting Overlay Widget" width="280"/>
+
+
+
+
 ## Properties
 
-- **`passPhrase`**:  
+### `passPhrase`:  
   The passphrase provided by PayFast for security.
 
-- **`useSandBox`**:  
+### `useSandBox`:  
   A boolean flag to choose between sandbox or live environment.
 
-- **`data`**:  
+### `data`:  
   A `Map<String, dynamic>` containing the required payment data. This includes keys like:
   - `merchant_id`
   - `merchant_key`
@@ -496,31 +676,31 @@ PayFast(
   - `item_name`
   - `m_payment_id`
 
-- **`onsiteActivationScriptUrl`**:  
+### `onsiteActivationScriptUrl`:  
   The PayFast URL used for onsite payment activation.
 
-- **`onPaymentCompleted`**:  
+### `onPaymentCompleted`:  
   A callback function to handle payment completion.
 
-- **`onPaymentCancelled`**:  
+### `onPaymentCancelled`:  
   A callback function to handle payment cancellation.
 
-- **`paymentSumarryWidget`**:  
+### `paymentSumarryWidget`:  
   A custom widget to display the payment summary before the user proceeds with the payment.
 
-- **`payButtonStyle`**:  
+### `payButtonStyle`:  
   The style of the "Pay Now" button.
 
-- **`payButtonText`**:  
+### `payButtonText`:  
   The text displayed on the "Pay Now" button.
 
-- **`paymentCompletedWidget`**:  
+### `paymentCompletedWidget`:  
   A custom widget to show after the payment is successfully completed.
 
-- **`paymentCancelledWidget`**:  
+### `paymentCancelledWidget`:  
   A custom widget to show if the payment is cancelled.
 
-- **`waitingOverlayWidget`**:  
+### `waitingOverlayWidget`:  
   A custom widget to show a loading spinner during payment processing.
 
 

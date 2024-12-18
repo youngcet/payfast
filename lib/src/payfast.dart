@@ -303,7 +303,7 @@ class _PayFastState extends State<PayFast> {
           onNavigationRequest: (NavigationRequest request) async {
             debugPrint('url loaded: ${request.url}');
 
-            if (request.url.contains('completed')) {
+            if (request.url.contains(Constants.completed)) {
               setState(() {
                 _showWebViewWidget = PaymentCompleted(
                   onPaymentCompleted: widget.onPaymentCompleted,
@@ -314,7 +314,7 @@ class _PayFastState extends State<PayFast> {
               return NavigationDecision.prevent;
             }
 
-            if (request.url.contains('closed')) {
+            if (request.url.contains(Constants.closed)) {
               setState(() {
                 _showWebViewWidget = PaymentCancelled(
                   onPaymentCancelled: widget.onPaymentCancelled,
