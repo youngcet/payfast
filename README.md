@@ -64,7 +64,7 @@ This package uses Payfast's Onsite Payments integration, therefore, you need to 
 
 > **Note:** You can also host the file on Github Pages
 
-Below are GitHub links that you can use if you prefer not to host the files yourself or need them for development purposes:
+Below are GitHub links that you can use if you prefer not to host the file yourself or need them for development purposes:
 
 - https://youngcet.github.io/sandbox_payfast_onsite_payments/ > use to point to the sandbox
 - https://youngcet.github.io/payfast_onsite_payments/ > use to point to the live server
@@ -110,7 +110,7 @@ Copy the `html` file below and host it on a secure server:
 
 Alternatively, you can create your own `html` file but make sure to include the tags below (**do not modify the code**):
 
-**Sandbox script location**
+
 ```html
 <script src="https://sandbox.payfast.co.za/onsite/engine.js"></script> 
 <script>
@@ -195,7 +195,7 @@ Add the key below in `ios/Runner/Info.plist`
 <string>YES</string>
 ```
 
-**Import the package and create a Payfast Widget**
+**Import the package and create a PayFast Widget**
 
 ```dart
 import 'dart:math';
@@ -269,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 'merchant_key': '000000', // Your payfast merchant key (use sandbox details if sandbox is set to true)
                 'name_first': 'Yung', // customer first name
                 'name_last': 'Cet',   // customer last name
-                'email_address': 'domain@gmail.com', // email address
+                'email_address': 'username@domain.com', // email address
                 'm_payment_id': '7663668635664', // payment id
                 'amount': '50', // amount
                 'item_name': '#0000002', // item name
@@ -588,6 +588,11 @@ PayFast(
 
 ### `onsiteActivationScriptUrl`:  
   The html file URL used for onsite payment activation.
+
+  Below are GitHub links that you can use if you prefer not to host the file yourself or need them for development purposes:
+
+- https://youngcet.github.io/sandbox_payfast_onsite_payments/ > use to point to the sandbox
+- https://youngcet.github.io/payfast_onsite_payments/ > use to point to the live server
 
 ### `onPaymentCompleted`:  
   A callback function to handle payment completion.

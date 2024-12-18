@@ -1,6 +1,6 @@
 name: payfast
 description: A Flutter package to integrate PayFast payments into your app.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/youngcet/payfast
 
 environment:
@@ -29,8 +29,8 @@ dev_dependencies:
 flutter:
 
   # To add assets to your package, add an assets section, like this:
-  assets:
-    - assets/www/index.html
+  # assets:
+  #   - assets/www/index.html
   
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

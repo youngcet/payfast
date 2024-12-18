@@ -147,8 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         backgroundColor: Colors.white,
                         builder: (context) => PayFast(
                           data: {
-                            'merchant_id': 'xxxxxxxx', 
-                            'merchant_key': 'xxxxxxxxxxxx',
+                            'merchant_id': 'xxxxxxxxxxxx',  
+                            'merchant_key': 'xxxxxxxxxxxxxxxxx',
                             'name_first': 'Yung',
                             'name_last': 'Cet',
                             'email_address': 'username@domain.com',
@@ -157,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             'item_name': '#0000002',
                           }, 
                           passPhrase: 'xxxxxxxxxxxx', 
-                          useSandBox: true,
+                          useSandBox: true, // true to use Payfast sandbox, false to use their live server
                           // if useSandbox is set to true, use a sandbox link
                           // you can use the github link below or provide your own link
                           onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',

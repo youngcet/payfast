@@ -1,3 +1,8 @@
+## 0.0.3
+
+- Updated README
+- Added **onsiteActivationScriptUrl** links to use for development/testing
+
 ## 0.0.2
 
 - Specified platforms in pubspec file, pub dev failing to identify the platforms
