@@ -18,6 +18,9 @@
 
 A Flutter package to integrate PayFast payments into your app.
 
+[![Pub Version](https://img.shields.io/pub/v/payfast)](https://pub.dev/packages/payfast)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/youngcet/payfast/blob/main/LICENSE)
+
 - [Getting Started](#getting-started)
   * [Usage](#usage)
   * [Payfast Onsite Activation Script](#payfast-onsite-activation-script)
