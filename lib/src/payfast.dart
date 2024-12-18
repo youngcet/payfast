@@ -129,6 +129,8 @@ class _PayFastState extends State<PayFast> {
   void initState() {
     super.initState();
 
+    _validate();
+
     setState(() {
       _showWebViewWidget = Padding(
         padding: const EdgeInsets.all(16.0),
@@ -172,6 +174,14 @@ class _PayFastState extends State<PayFast> {
         ),
       );
     });
+  }
+
+  /// validate certain fields
+  void _validate(){
+    bool _validURL = Uri.tryParse(widget.onsiteActivationScriptUrl)?.hasAbsolutePath ?? false;
+    if (!_validURL || ! widget.onsiteActivationScriptUrl.startsWith('https')){
+      throw Exception('onsiteActivationScriptUrl URL not valid');
+    }
   }
 
   /// A set of gesture recognizers used to handle touch gestures.

@@ -82,29 +82,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void paymentCompleted(){
-    Navigator.push(
-      context,
-      CupertinoPageRoute(builder: (context) => const MyApp()),
-    );
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
           content: Text('Payment Successful!'),
           behavior: SnackBarBehavior.floating),
     );
-  }
-
-  void paymentCancelled(){
+    
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => const MyApp()),
     );
+  }
 
+  void paymentCancelled(){
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
           content: Text('Payment Cancelled!'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,),
+    );
+
+    Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (context) => const MyApp()),
     );
   }
 
@@ -147,8 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         backgroundColor: Colors.white,
                         builder: (context) => PayFast(
                           data: {
-                            'merchant_id': 'xxxxxxxxxxxx', 
-                            'merchant_key': 'xxxxxxxxxxxxxx',
+                            'merchant_id': 'xxxxxxxx', 
+                            'merchant_key': 'xxxxxxxxxxxx',
                             'name_first': 'Yung',
                             'name_last': 'Cet',
                             'email_address': 'username@domain.com',
@@ -156,9 +156,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             'amount': '20',
                             'item_name': '#0000002',
                           }, 
-                          passPhrase: 'xxxxxxxxxxxxxxxxxxx', 
+                          passPhrase: 'xxxxxxxxxxxx', 
                           useSandBox: true,
-                          onsiteActivationScriptUrl: 'url to html file',
+                          // if useSandbox is set to true, use a sandbox link
+                          // you can use the github link below or provide your own link
+                          onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
                           onPaymentCancelled: () => paymentCancelled(),
                           onPaymentCompleted: () => paymentCompleted(),
                         ),

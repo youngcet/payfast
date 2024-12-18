@@ -24,6 +24,8 @@ A Flutter package to integrate PayFast payments into your app.
 - [Getting Started](#getting-started)
   * [Usage](#usage)
   * [Payfast Onsite Activation Script](#payfast-onsite-activation-script)
+    * [Hosting on Gihub](#hosting-on-github)
+    * [Hosting on a different server](#hosting-on-a-different-server)
   * [Android & IOS Setup](#android-and-ios-setup)
 - [Features](#features)
   * [Onsite Payments](#onsite-payments)
@@ -54,134 +56,37 @@ A Flutter package to integrate PayFast payments into your app.
 
 ## Getting Started
 
-This package uses Payfast's Onsite Payments integration, therefore, you need to host their onsite activiation script. Copy the `html` file below and host it on a secure server:
+This package uses Payfast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
 
 ## Payfast Onsite Activation Script
+
+### Hosting on Github
+
+> **Note:** You can also host the file on Github Pages
+
+Below are GitHub links that you can use if you prefer not to host the files yourself or need them for development purposes:
+
+- https://youngcet.github.io/sandbox_payfast_onsite_payments/ > use to point to the sandbox
+- https://youngcet.github.io/payfast_onsite_payments/ > use to point to the live server
+
+> **Note:** While these links are hosted on GitHub, accessing them through a browser will result in a 404 error from PayFast. This behavior is expected and not an issue.
+
+
+### Hosting on a different server
+
+Copy the `html` file below and host it on a secure server:
+
+
 ```html
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>
-    <style>
-        .lds-roller,
-        .lds-roller div,
-        .lds-roller div:after {
-            box-sizing: border-box;
-        }
-
-        .lds-roller {
-            /* margin: 0px auto; */
-            width: 80%;
-            /* height: 80px; */
-            height: 100%; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            margin: 0; 
-        }
-
-        .lds-roller div {
-            animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            transform-origin: 40px 40px;
-        }
-
-        .lds-roller div:after {
-            content: " ";
-            display: block;
-            position: absolute;
-            width: 7.2px;
-            height: 7.2px;
-            border-radius: 50%;
-            background: currentColor;
-            margin: -3.6px 0 0 -3.6px;
-        }
-
-        .lds-roller div:nth-child(1) {
-            animation-delay: -0.036s;
-        }
-
-        .lds-roller div:nth-child(1):after {
-            top: 62.62742px;
-            left: 62.62742px;
-        }
-
-        .lds-roller div:nth-child(2) {
-            animation-delay: -0.072s;
-        }
-
-        .lds-roller div:nth-child(2):after {
-            top: 67.71281px;
-            left: 56px;
-        }
-
-        .lds-roller div:nth-child(3) {
-            animation-delay: -0.108s;
-        }
-
-        .lds-roller div:nth-child(3):after {
-            top: 70.90963px;
-            left: 48.28221px;
-        }
-
-        .lds-roller div:nth-child(4) {
-            animation-delay: -0.144s;
-        }
-
-        .lds-roller div:nth-child(4):after {
-            top: 72px;
-            left: 40px;
-        }
-
-        .lds-roller div:nth-child(5) {
-            animation-delay: -0.18s;
-        }
-
-        .lds-roller div:nth-child(5):after {
-            top: 70.90963px;
-            left: 31.71779px;
-        }
-
-        .lds-roller div:nth-child(6) {
-            animation-delay: -0.216s;
-        }
-
-        .lds-roller div:nth-child(6):after {
-            top: 67.71281px;
-            left: 24px;
-        }
-
-        .lds-roller div:nth-child(7) {
-            animation-delay: -0.252s;
-        }
-
-        .lds-roller div:nth-child(7):after {
-            top: 62.62742px;
-            left: 17.37258px;
-        }
-
-        .lds-roller div:nth-child(8) {
-            animation-delay: -0.288s;
-        }
-
-        .lds-roller div:nth-child(8):after {
-            top: 56px;
-            left: 12.28719px;
-        }
-
-        @keyframes lds-roller {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     <script>
+            // DO NOT MODIFY THE CODE BELOW
+
             // retrieve the uuid that is passed to this file and send it to payfast onsite engine
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
@@ -269,12 +174,12 @@ dependencies:
 
 **Android Setup**
 
-Set the correct `minSdkVersion` in `android/app/build.gradle` if it was previously lower than 19:
+Set `minSdkVersion` in `android/app/build.gradle` to greater than 19:
 
 ```groovy
 android {
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
     }
 }
 ```
@@ -358,10 +263,10 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         body: Center(
           child: PayFast(
-            // all the data fields are required
+            // all the 'data' fields are required
             data: {
-                'merchant_id': '0000000', // Your payfast merchant id
-                'merchant_key': '000000', // Your payfast merchant key
+                'merchant_id': '0000000', // Your payfast merchant id (use sandbox details if sandbox is set to true)
+                'merchant_key': '000000', // Your payfast merchant key (use sandbox details if sandbox is set to true)
                 'name_first': 'Yung', // customer first name
                 'name_last': 'Cet',   // customer last name
                 'email_address': 'domain@gmail.com', // email address
@@ -371,7 +276,9 @@ class _MyHomePageState extends State<MyHomePage> {
             }, 
             passPhrase: 'xxxxxxxxxxxxxxx',  // Your payfast passphrase
             useSandBox: true, // true to use Payfast sandbox, false to use their live server
-            onsiteActivationScriptUrl: 'https://somedomain.com', // url to the html file above
+            // if useSandbox is set to true, use a sandbox link
+            // you can use the github link below or provide your own link
+            onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/', // url to the html file
             onPaymentCancelled: () => paymentCompleted(), // callback function for successful payment
             onPaymentCompleted: () => paymentCancelled(), // callback function for cancelled payment
         ),)
@@ -680,7 +587,7 @@ PayFast(
   - `m_payment_id`
 
 ### `onsiteActivationScriptUrl`:  
-  The PayFast URL used for onsite payment activation.
+  The html file URL used for onsite payment activation.
 
 ### `onPaymentCompleted`:  
   A callback function to handle payment completion.
