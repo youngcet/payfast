@@ -709,6 +709,7 @@ The widget is designed to accept only the required parameters, making it simple 
 
 
 **Testing the Payment Flow**
+
 To test the payment flow, make sure that the useSandBox flag is set to true in the PayFast widget.
 
 Use the provided sandbox URL (https://youngcet.github.io/sandbox_payfast_onsite_payments/) or replace it with your own sandbox testing URL. **Deploy the app to an iOS or Android device (emulator) for testing.**
