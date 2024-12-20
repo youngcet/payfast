@@ -575,6 +575,9 @@ PayFast(
 
 **PayFast Flutter Package Integration with FlutterFlow**
 
+FlutterFlow Demo:
+https://app.flutterflow.io/share/pay-fast-demo-wgqscg
+
 To integrate with FluterFlow, 
 
 1. Create a new Custom Widget under **Custom Code** in FlutterFlow.
