@@ -716,7 +716,7 @@ Use the provided sandbox URL (https://youngcet.github.io/sandbox_payfast_onsite_
 
 
 
-<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_02.png?raw=true" alt="FlutterFlow PayFast Widget" width="600"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_02.png?raw=true" alt="FlutterFlow PayFast Widget" width="700"/>
 
 
 
