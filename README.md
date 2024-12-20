@@ -34,6 +34,7 @@ A Flutter package to integrate PayFast payments into your app.
   * [Customizable Payment Summary Widget](#customizable-payment-summary-widget)
   * [Customizable Payment Button](#customizable-payment-button)
   * [Customizable Waiting Overlay Widget](#customizable-waiting-overlay-widget)
+  * [FlutterFlow Integration](#flutterflow-integration)
 - [Properties](#properties)
   * [passPhrase](#passphrase)
   * [useSandBox](#usesandbox)
@@ -58,7 +59,7 @@ A Flutter package to integrate PayFast payments into your app.
 
 This package uses Payfast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
 
-## Payfast Onsite Activation Script
+## PayFast Onsite Activation Script
 
 ### Hosting on Github
 
@@ -224,10 +225,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.processPayment});
+  const MyHomePage({super.key, required this.title});
 
   final String title;
-  final Function? processPayment;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -293,6 +293,7 @@ The code above will show you the screen below:
 <img src="https://github.com/youngcet/payfast/blob/main/doc/basic_app_screenshot.png?raw=true" alt="Basic App Screenshot" width="280"/>
 
 
+
 ## Features
 
 ### Onsite Payments
@@ -327,6 +328,7 @@ PayFast(
 ```
 
 <img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed.png?raw=true" alt="Payment Completed" width="280"/>
+
 <img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled.png?raw=true" alt="Payment Cancelled" width="280"/>
 
 
@@ -342,6 +344,7 @@ PayFast(
 
 
 <img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_text.png?raw=true" alt="Payment Completed Text" width="280"/>
+
 <img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_text.png?raw=true" alt="Payment Cancelled Text" width="280"/>
 
 
@@ -414,6 +417,7 @@ PayFast(
 
 
 <img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_widget.png?raw=true" alt="Payment Completed Widget" width="280"/>
+
 <img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_widget.png?raw=true" alt="Payment Cancelled Widget" width="280"/>
 
 
@@ -567,6 +571,153 @@ PayFast(
 
 
 
+### FlutterFlow Integration
+
+**PayFast Flutter Package Integration with FlutterFlow**
+
+To integrate with FluterFlow, 
+
+1. Create a new Custom Widget under **Custom Code** in FlutterFlow.
+2. Rename the widget to **PayFastWidget**.
+3. Under Widget Settings, add the following parameters:
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_widget_settings.png?raw=true" alt="FlutterFlow Settings" width="280"/>
+
+
+4. Add **payfast: ^latest_version** to the dependencies and refresh the UI (replace latest_version with the latest version).
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_dependency.png?raw=true" alt="FlutterFlow Dependency" width="280"/>
+
+
+5. Copy and paste the code below (**do not use the boilerplate code provided**):
+
+```dart 
+// Automatic FlutterFlow imports
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/widgets/index.dart'; // Imports other custom widgets
+import '/flutter_flow/custom_functions.dart'; // Imports custom functions
+import 'package:flutter/material.dart';
+// Begin custom widget code
+// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+import 'package:payfast/payfast.dart';
+
+// Set your widget name, define your parameter, and then add the
+// boilerplate code using the green button on the right!
+
+class PayFastWidget extends StatefulWidget {
+  final String passPhrase;
+  final bool useSandBox;
+  final dynamic data;
+  final Future Function() onPaymentCancelled;
+  final Future Function() onPaymentCompleted;
+  final String onsiteActivationScriptUrl;
+
+  // fields below are required for a FlutterFlow widget
+  final double? width;
+  final double? height;
+
+  const PayFastWidget({
+    required this.useSandBox,
+    required this.passPhrase,
+    required this.data,
+    required this.onsiteActivationScriptUrl,
+    required this.onPaymentCancelled,
+    required this.onPaymentCompleted,
+    this.width,
+    this.height,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<PayFastWidget> createState() => _PayFastWidgetState();
+}
+
+class _PayFastWidgetState extends State<PayFastWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Scaffold(
+          body: Center(
+              child: PayFast(
+        data: widget.data,
+        passPhrase: widget.passPhrase,
+        useSandBox: widget.useSandBox,
+        onsiteActivationScriptUrl: widget.onsiteActivationScriptUrl,
+        onPaymentCancelled: () => widget.onPaymentCancelled(), 
+        onPaymentCompleted: () => widget.onPaymentCompleted(),
+        paymentSumarryWidget: _paymentSummary(),
+      ))),
+    );
+  }
+
+  // modify or remove this widget
+  // this is only for demostration purposes
+  Widget _paymentSummary() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Order Summary',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
+              color: Colors.black),
+        ),
+        const SizedBox(height: 10),
+        Card(
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: const [
+                ListTile(
+                  title: Text('Product 1'),
+                  trailing: Text('R20.00'),
+                ),
+                ListTile(
+                  title: Text('Product 2'),
+                  trailing: Text('R15.00'),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text(
+                    'Total',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: Text(
+                    'R35.00',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+```
+
+The widget is designed to accept only the required parameters, making it simple to configure within the 'Widget Palette'. For additional optional parameters, which are more cosmetic, it is recommended to add them directly in the code. This approach is similar to how the `paymentSummaryWidget` was integrated in the example above.
+
+6. Save and Compile the code. There should be no errors.
+7. In the **Widget Palette**, drag and drop the PayFast Widget onto your page. Select the widget and configure the required parameters. For the `onPaymentCancelled` and `onPaymentCompleted` callbacks, add appropriate actions, such as navigating to a specific page or displaying a confirmation message.
+
+
+**Testing the Payment Flow**
+To test the payment flow, make sure that the useSandBox flag is set to true in the PayFast widget.
+
+Use the provided sandbox URL (https://youngcet.github.io/sandbox_payfast_onsite_payments/) or replace it with your own sandbox testing URL. **Deploy the app to an iOS or Android device (emulator) for testing.**
+
+
+
+<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_02.png?raw=true" alt="FlutterFlow PayFast Widget" width="600"/>
+
+
 
 ## Properties
 
@@ -617,6 +768,11 @@ PayFast(
 
 ### `waitingOverlayWidget`:  
   A custom widget to show a loading spinner during payment processing.
+
+
+## Conclusion
+
+This package allows you to easily integrate PayFast into your Flutter project and FlutterFlow. The integration can be fully customized to match your app's payment requirements. For production, ensure that you replace the sandbox configuration with live credentials and URLs.
 
 
 ## Contributing

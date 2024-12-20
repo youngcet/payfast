@@ -1,13 +1,31 @@
 import 'package:flutter/material.dart';
 
+/// A widget that represents a payment cancellation state.
+/// 
+/// This widget is used to display a message and an optional custom layout when a payment 
+/// has been cancelled. It provides a default UI with a cancellation icon, message, and 
+/// a button to continue the flow.
+/// 
+/// You can customize the displayed content by providing a child widget or 
+/// modifying the cancellation message.
+/// 
+/// ## Parameters:
+/// 
+/// - [onPaymentCancelledText]: Optional text displayed when the payment is cancelled. 
+///   Defaults to a detailed message about the cancellation.
+/// - [onPaymentCancelled]: A required callback function that is executed when the 
+///   "Continue" button is pressed.
+/// - [child]: An optional custom widget to replace the default UI. If provided, the 
+///   child widget will be rendered instead of the default card layout.
+/// 
 class PaymentCancelled extends StatelessWidget {
-  /// cancelled text
+  /// The message displayed when the payment is cancelled.
   final String? onPaymentCancelledText;
 
-  /// callback function
+  /// A callback function executed when the "Continue" button is pressed.
   final Function onPaymentCancelled;
 
-  /// custom widget
+  /// An optional custom widget to replace the default layout.
   final Widget? child;
 
   const PaymentCancelled(

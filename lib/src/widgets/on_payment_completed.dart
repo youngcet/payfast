@@ -1,13 +1,30 @@
 import 'package:flutter/material.dart';
 
+/// A widget that represents a payment completion state.
+/// 
+/// This widget is used to display a message and an optional custom layout when a payment 
+/// has been completed successfully. It provides a default UI with a success icon, message, 
+/// and a button to continue the flow.
+/// 
+/// You can customize the displayed content by providing a child widget or modifying 
+/// the success message.
+/// 
+/// ## Parameters:
+/// 
+/// - [onPaymentCompletedText]: Optional text displayed when the payment is successfully completed. 
+///   Defaults to a thank-you message for the user.
+/// - [onPaymentCompleted]: A required callback function that is executed when the 
+///   "Continue" button is pressed.
+/// - [child]: An optional custom widget to replace the default UI. If provided, the 
+///   child widget will be rendered instead of the default card layout.
 class PaymentCompleted extends StatelessWidget {
-  /// completed text
+  /// The message displayed when the payment is completed successfully.
   final String? onPaymentCompletedText;
 
-  /// callback function
+  /// A callback function executed when the "Continue" button is pressed.
   final Function onPaymentCompleted;
 
-  /// custom widget
+  /// An optional custom widget to replace the default layout.
   final Widget? child;
 
   const PaymentCompleted(

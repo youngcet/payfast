@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays a summary of the payment details.
+///
+/// The `PaymentSummary` widget shows the details of a payment, including the 
+/// product/item information and the total amount. It provides an option to 
+/// customize the layout with a custom widget (`child`), and allows the use of 
+/// an optional icon and title.
+/// 
+/// ## Parameters:
+/// 
+/// - [child]: An optional custom widget to replace the default payment summary layout.
+/// - [data]: A map of payment data, typically containing the user's information, 
+///   item name, and the payment amount.
+/// - [icon]: An optional icon to display next to the payment summary, replacing 
+///   the default shopping bag icon.
+/// - [title]: An optional title for the payment details section. Defaults to "Payment Details:".
 class PaymentSummary extends StatelessWidget {
-  /// custom widget
+  /// An optional custom widget to replace the default layout.
   final Widget? child;
 
-  /// payment data
+  /// A map containing payment data, such as the user's name, item name, and amount.
   final Map<String, dynamic> data;
 
-  /// icon
+  /// An optional icon to display next to the payment summary details. 
+  /// Defaults to a shopping bag icon.
   final Icon? icon;
 
-  /// title
+  /// An optional title for the payment summary section. Defaults to 'Payment Details:'.
   final String? title;
 
   const PaymentSummary(
