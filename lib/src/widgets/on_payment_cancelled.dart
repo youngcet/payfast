@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
 /// A widget that represents a payment cancellation state.
-/// 
-/// This widget is used to display a message and an optional custom layout when a payment 
-/// has been cancelled. It provides a default UI with a cancellation icon, message, and 
+///
+/// This widget is used to display a message and an optional custom layout when a payment
+/// has been cancelled. It provides a default UI with a cancellation icon, message, and
 /// a button to continue the flow.
-/// 
-/// You can customize the displayed content by providing a child widget or 
+///
+/// You can customize the displayed content by providing a child widget or
 /// modifying the cancellation message.
-/// 
+///
 /// ## Parameters:
-/// 
-/// - [onPaymentCancelledText]: Optional text displayed when the payment is cancelled. 
+///
+/// - [onPaymentCancelledText]: Optional text displayed when the payment is cancelled.
 ///   Defaults to a detailed message about the cancellation.
-/// - [onPaymentCancelled]: A required callback function that is executed when the 
+/// - [onPaymentCancelled]: A required callback function that is executed when the
 ///   "Continue" button is pressed.
-/// - [child]: An optional custom widget to replace the default UI. If provided, the 
+/// - [child]: An optional custom widget to replace the default UI. If provided, the
 ///   child widget will be rendered instead of the default card layout.
-/// 
+/// - [ShapeBorder]: An optional property that defines the shape of the widget's border.
 class PaymentCancelled extends StatelessWidget {
   /// The message displayed when the payment is cancelled.
   final String? onPaymentCancelledText;
@@ -28,19 +28,29 @@ class PaymentCancelled extends StatelessWidget {
   /// An optional custom widget to replace the default layout.
   final Widget? child;
 
-  const PaymentCancelled(
-      {super.key,
-      this.onPaymentCancelledText,
-      required this.onPaymentCancelled,
-      this.child});
+  /// An optional property that defines the shape of the widget's border.
+  final ShapeBorder? shape;
+
+  const PaymentCancelled({
+    super.key,
+    this.onPaymentCancelledText,
+    required this.onPaymentCancelled,
+    this.child,
+    this.shape,
+  });
 
   @override
   Widget build(BuildContext context) {
     return child ??
         Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          shape: shape ??
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(
+                  color: Colors.redAccent,
+                  width: 1, // Border width
+                ),
+              ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Center(

@@ -1,7 +1,7 @@
 /// A class that contains all the constant values related to the PayFast API and endpoints.
 ///
-/// This class holds static constant strings that are used across the application 
-/// for connecting to PayFast services, both live and sandbox environments. The constants 
+/// This class holds static constant strings that are used across the application
+/// for connecting to PayFast services, both live and sandbox environments. The constants
 /// define the base URLs and endpoints for API calls and onsite payment processing.
 class Constants {
   // PayFast API URLs
@@ -22,7 +22,7 @@ class Constants {
   /// The endpoint for sandbox onsite payment processing with PayFast, used for testing.
   static const String onsitePaymentSandboxEndpoint =
       'https://sandbox.payfast.co.za/onsite/process';
-  
+
   static const String completed = 'completed';
   static const String closed = 'closed';
 }

@@ -35,6 +35,7 @@ A Flutter package to integrate PayFast payments into your app.
   * [Customizable Payment Button](#customizable-payment-button)
   * [Customizable Waiting Overlay Widget](#customizable-waiting-overlay-widget)
   * [FlutterFlow Integration](#flutterflow-integration)
+  * [Customizable Animation](#customizable-animation)
 - [Properties](#properties)
   * [passPhrase](#passphrase)
   * [useSandBox](#usesandbox)
@@ -339,6 +340,23 @@ PayFast(
     ...
     onPaymentCancelledText: 'This payment was cancelled!',
     onPaymentCompletedText: 'Payment received - woohoo!',
+
+    // use below properties to change the shape borders for each widget
+    onPaymentCompletedShapeBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: const BorderSide(
+        color: Colors.green,
+        width: 1, // Border width
+      ),
+    ),
+    onPaymentCancelledShapeBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: const BorderSide(
+        color: Colors.redAccent,
+        width: 1, // Border width
+      ),
+    )
+
 ) 
 ```
 
@@ -723,6 +741,34 @@ Use the provided sandbox URL (https://youngcet.github.io/sandbox_payfast_onsite_
 <img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_02.png?raw=true" alt="FlutterFlow PayFast Widget" width="600"/>
 
 
+### Customizable Animation
+
+The `animatedSwitcherWidget` object allows you to pass customizable animation duration and transition builder parameters to override the current animation. This uses the `AnimatedSwitcher` animation.
+
+**Parameters**
+
+**Duration**
+- **Type:** `Duration?`
+- **Description:** Specifies how long the animation should last. Use `null` to allow fallback to default durations elsewhere.
+
+**Transition Builder**
+- **Type:** `Widget Function(Widget, Animation<double>)?`
+- **Description:** Defines how widgets transition during the animation. Use `null` to apply default transitions like `FadeTransition`.
+
+
+```dart 
+PayFast(
+  ...
+  animatedSwitcherWidget: AnimatedSwitcherWidget(
+    Duration(milliseconds: 300), 
+    (child, animation) {
+      return FadeTransition(opacity: animation, child: child);
+    }
+  )
+)
+```
+
+
 
 ## Properties
 
@@ -773,6 +819,28 @@ Use the provided sandbox URL (https://youngcet.github.io/sandbox_payfast_onsite_
 
 ### `waitingOverlayWidget`:  
   A custom widget to show a loading spinner during payment processing.
+
+### `backgroundColor`:  
+  A background color of the payment summary page
+
+### `animatedSwitcherWidget`
+The `animatedSwitcherWidget` object allows you to pass customizable animation duration and transition builder parameters to override the current animation. This uses the `AnimatedSwitcher` animation.
+
+**Parameters**
+
+**Duration**
+- **Type:** `Duration?`
+- **Description:** Specifies how long the animation should last. Use `null` to allow fallback to default durations elsewhere.
+
+**Transition Builder**
+- **Type:** `Widget Function(Widget, Animation<double>)?`
+- **Description:** Defines how widgets transition during the animation. Use `null` to apply default transitions like `FadeTransition`.
+
+### `onPaymentCompletedShapeBorder`
+An optional property that defines the shape of the `onPaymentCompleted` widget's border.
+
+### `onPaymentCancelledShapeBorder`
+An optional property that defines the shape of the `onPaymentCancelled` widget's border.
 
 
 ## Conclusion

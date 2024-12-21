@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:payfast/src/animation/my_animated_switcher.dart';
 import 'package:payfast/src/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:payfast/src/widgets/on_payment_cancelled.dart';
 import 'package:payfast/src/widgets/on_payment_completed.dart';
 import 'package:payfast/src/widgets/payment_summary.dart';
+import 'package:payfast/src/widgets/summary_widget.dart';
 import 'package:payfast/src/widgets/waiting_overlay.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -19,11 +21,11 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
-/// The `PayFast` class is a stateful widget designed to integrate 
+/// The `PayFast` class is a stateful widget designed to integrate
 /// PayFast's payment processing system into a Flutter application.
 ///
 /// This widget provides a fully customizable payment interface,
-/// allowing developers to easily integrate both sandbox and live 
+/// allowing developers to easily integrate both sandbox and live
 /// environments of the PayFast API.
 ///
 /// ### Features
@@ -36,53 +38,56 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 ///
 /// ### Parameters
 ///
-/// - **[passPhrase]** *(String)*: The PayFast passphrase required for securing 
+/// - **[passPhrase]** *(String)*: The PayFast passphrase required for securing
 ///   the payment process. This is mandatory.
 ///
-/// - **[useSandBox]** *(bool)*: Indicates whether to use the PayFast sandbox 
+/// - **[useSandBox]** *(bool)*: Indicates whether to use the PayFast sandbox
 ///   environment for testing. Defaults to `false` for the live environment.
 ///
-/// - **[data]** *(Map<String, dynamic>)*: A map containing payment-related data 
-///   such as `merchant_id`, `amount`, and `item_name`. The map must include 
+/// - **[data]** *(Map<String, dynamic>)*: A map containing payment-related data
+///   such as `merchant_id`, `amount`, and `item_name`. The map must include
 ///   required fields for successful processing.
 ///
-/// - **[payButtonStyle]** *(ButtonStyle?)*: Custom style for the "Pay Now" button. 
+/// - **[payButtonStyle]** *(ButtonStyle?)*: Custom style for the "Pay Now" button.
 ///   If not provided, a default style is applied.
 ///
-/// - **[payButtonText]** *(String?)*: Text displayed on the "Pay Now" button. 
+/// - **[payButtonText]** *(String?)*: Text displayed on the "Pay Now" button.
 ///   Defaults to "Pay Now" if not specified.
 ///
-/// - **[onsiteActivationScriptUrl]** *(String)*: The URL for the PayFast onsite 
+/// - **[onsiteActivationScriptUrl]** *(String)*: The URL for the PayFast onsite
 ///   activation script. Must be an absolute HTTPS URL.
 ///
-/// - **[paymentSumarryWidget]** *(Widget?)*: A customizable widget for displaying 
+/// - **[paymentSumarryWidget]** *(Widget?)*: A customizable widget for displaying
 ///   the payment summary, such as item details and amounts.
 ///
-/// - **[onPaymentCompleted]** *(Function)*: A callback function triggered when 
+/// - **[onPaymentCompleted]** *(Function)*: A callback function triggered when
 ///   the payment is successfully completed.
 ///
-/// - **[onPaymentCancelled]** *(Function)*: A callback function triggered when 
+/// - **[onPaymentCancelled]** *(Function)*: A callback function triggered when
 ///   the payment is cancelled by the user.
 ///
-/// - **[onPaymentCancelledText]** *(String?)*: Optional text displayed when the 
+/// - **[onPaymentCancelledText]** *(String?)*: Optional text displayed when the
 ///   payment is cancelled. Defaults to a generic cancellation message if not set.
 ///
-/// - **[onPaymentCompletedText]** *(String?)*: Optional text displayed when the 
+/// - **[onPaymentCompletedText]** *(String?)*: Optional text displayed when the
 ///   payment is completed successfully. Defaults to a generic success message if not set.
 ///
-/// - **[paymentCompletedWidget]** *(Widget?)*: A widget displayed upon successful 
+/// - **[paymentCompletedWidget]** *(Widget?)*: A widget displayed upon successful
 ///   payment completion, allowing further customization of the success message or view.
 ///
-/// - **[paymentCancelledWidget]** *(Widget?)*: A widget displayed when the payment 
+/// - **[paymentCancelledWidget]** *(Widget?)*: A widget displayed when the payment
 ///   is cancelled, offering customization for the cancellation view.
 ///
-/// - **[waitingOverlayWidget]** *(Widget?)*: A widget displayed during loading 
+/// - **[waitingOverlayWidget]** *(Widget?)*: A widget displayed during loading
 ///   or processing states, such as a spinner or loading indicator.
 ///
-/// - **[paymentSummaryTitle]** *(String?)*: The title text for the payment summary 
+/// - **[paymentSummaryTitle]** *(String?)*: The title text for the payment summary
 ///   section. Defaults to a generic "Payment Summary" title if not provided.
 ///
-/// - **[defaultPaymentSummaryIcon]** *(Icon?)*: The default icon displayed in the 
+/// - **[defaultPaymentSummaryIcon]** *(Icon?)*: The default icon displayed in the
+///   payment summary section. Can be customized to match the app's theme.
+///
+/// - **[backgroundColor]** *(Icon?)*: The default background color in the
 ///   payment summary section. Can be customized to match the app's theme.
 ///
 /// ### Example Usage
@@ -109,27 +114,27 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 /// ```
 ///
 /// ### Notes
-/// - Ensure all required fields are present in the `data` map, 
+/// - Ensure all required fields are present in the `data` map,
 ///   including `merchant_id`, `merchant_key`, `amount`, and `item_name`.
 /// - The onsite activation script URL must be valid and use HTTPS.
 
 class PayFast extends StatefulWidget {
   /// The passphrase associated with your PayFast account.
-  /// 
-  /// This is used to secure transactions and ensure the integrity of the 
-  /// payment process. The passphrase must match the one configured in your 
+  ///
+  /// This is used to secure transactions and ensure the integrity of the
+  /// payment process. The passphrase must match the one configured in your
   /// PayFast account settings.
   final String passPhrase;
 
   /// Determines whether to use the PayFast sandbox or live server.
-  /// 
-  /// Set this to `true` for testing in the sandbox environment and `false` 
-  /// for live transactions. The sandbox environment is used to simulate 
+  ///
+  /// Set this to `true` for testing in the sandbox environment and `false`
+  /// for live transactions. The sandbox environment is used to simulate
   /// transactions without processing real payments.
   final bool useSandBox;
 
   /// A map containing the necessary payment details.
-  /// 
+  ///
   /// This map should include mandatory fields such as:
   /// - `merchant_id`: Your PayFast merchant ID.
   /// - `merchant_key`: Your PayFast merchant key.
@@ -143,88 +148,105 @@ class PayFast extends StatefulWidget {
   final Map<String, dynamic> data;
 
   /// The style of the "Pay Now" button.
-  /// 
-  /// Use this to customize the appearance of the button, including its 
-  /// color, size, padding, and other visual properties. If null, a default 
+  ///
+  /// Use this to customize the appearance of the button, including its
+  /// color, size, padding, and other visual properties. If null, a default
   /// button style is applied.
   final ButtonStyle? payButtonStyle;
 
   /// The text displayed on the "Pay Now" button.
-  /// 
-  /// If not specified, the default text "Pay Now" will be used. You can 
+  ///
+  /// If not specified, the default text "Pay Now" will be used. You can
   /// customize this to match your application’s context or language.
   final String? payButtonText;
 
   /// The URL for the PayFast onsite activation script.
-  /// 
-  /// This script is used to initiate the payment process. The URL must 
-  /// start with `https` for secure communication. Invalid or insecure 
+  ///
+  /// This script is used to initiate the payment process. The URL must
+  /// start with `https` for secure communication. Invalid or insecure
   /// URLs will result in an exception.
   final String onsiteActivationScriptUrl;
 
   /// A widget to display the payment summary.
-  /// 
-  /// This widget is typically used to show a breakdown of the payment 
-  /// details, such as item names, quantities, and total amount. You can 
+  ///
+  /// This widget is typically used to show a breakdown of the payment
+  /// details, such as item names, quantities, and total amount. You can
   /// provide a custom widget to enhance the user experience.
   final Widget? paymentSumarryWidget;
 
   /// A callback function invoked when the payment process is completed successfully.
-  /// 
-  /// This function is executed after the user completes the payment on 
+  ///
+  /// This function is executed after the user completes the payment on
   /// PayFast and the system confirms the transaction.
   final Function onPaymentCompleted;
 
   /// A callback function invoked when the payment process is cancelled.
-  /// 
-  /// This function is executed if the user decides to cancel the payment 
-  /// process. You can use it to handle cancellation logic, such as reverting 
+  ///
+  /// This function is executed if the user decides to cancel the payment
+  /// process. You can use it to handle cancellation logic, such as reverting
   /// changes or showing a message to the user.
   final Function onPaymentCancelled;
 
   /// Optional text displayed when the payment is cancelled.
-  /// 
-  /// This text provides a message to the user after they cancel the payment 
+  ///
+  /// This text provides a message to the user after they cancel the payment
   /// process. If null, no text will be displayed.
   final String? onPaymentCancelledText;
 
   /// Optional text displayed when the payment is completed successfully.
-  /// 
-  /// This text provides a message to the user after they successfully 
+  ///
+  /// This text provides a message to the user after they successfully
   /// complete the payment. If null, no text will be displayed.
   final String? onPaymentCompletedText;
 
   /// A widget displayed when the payment process is successfully completed.
-  /// 
-  /// This widget can be customized to show a confirmation message, success 
+  ///
+  /// This widget can be customized to show a confirmation message, success
   /// icon, or any other content relevant to your application.
   final Widget? paymentCompletedWidget;
 
   /// A widget displayed when the payment process is cancelled by the user.
-  /// 
-  /// This widget can be customized to show a cancellation message, icon, 
+  ///
+  /// This widget can be customized to show a cancellation message, icon,
   /// or any other content relevant to your application.
   final Widget? paymentCancelledWidget;
 
   /// A widget displayed as a loading overlay during the payment process.
-  /// 
-  /// This widget provides feedback to the user while the payment is being 
-  /// processed, such as a spinner or loading animation. If null, no overlay 
+  ///
+  /// This widget provides feedback to the user while the payment is being
+  /// processed, such as a spinner or loading animation. If null, no overlay
   /// is displayed.
   final Widget? waitingOverlayWidget;
 
   /// The title displayed in the payment summary section.
-  /// 
-  /// This title can be used to provide context to the payment summary, 
-  /// such as "Order Summary" or "Payment Details". If null, no title is 
+  ///
+  /// This title can be used to provide context to the payment summary,
+  /// such as "Order Summary" or "Payment Details". If null, no title is
   /// displayed.
   final String? paymentSummaryTitle;
 
   /// The default icon displayed in the payment summary section.
-  /// 
-  /// This icon is used to visually represent the payment summary. You can 
+  ///
+  /// This icon is used to visually represent the payment summary. You can
   /// customize it to match your application’s theme or branding.
   final Icon? defaultPaymentSummaryIcon;
+
+  /// The background color for the payment summary widget widget.
+  ///
+  /// This color is applied to the container wrapping the child widget.
+  /// If `null`, no background color will be applied.
+  final Color? backgroundColor;
+
+  /// The animatedSwitcherWidget object allows you to pass customizable animation duration
+  /// and transition builder parameters to override the current animation.
+  /// This uses the AnimatedSwitcher animation.
+  final AnimatedSwitcherWidget? animatedSwitcherWidget;
+
+  /// An optional property that defines the shape of the `onPaymentCompleted` widget's border.
+  final ShapeBorder? onPaymentCompletedShapeBorder;
+
+  /// An optional property that defines the shape of the `onPaymentCancelled` widget's border.
+  final ShapeBorder? onPaymentCancelledShapeBorder;
 
   PayFast({
     required this.useSandBox,
@@ -243,7 +265,11 @@ class PayFast extends StatefulWidget {
     this.waitingOverlayWidget,
     this.paymentSummaryTitle,
     this.defaultPaymentSummaryIcon,
-    super.key, 
+    super.key,
+    this.backgroundColor,
+    this.animatedSwitcherWidget,
+    this.onPaymentCompletedShapeBorder,
+    this.onPaymentCancelledShapeBorder,
   })  : assert(data.containsKey('merchant_id'),
             'Missing required key: merchant_id'),
         assert(data.containsKey('merchant_key'),
@@ -280,72 +306,27 @@ class _PayFastState extends State<PayFast> {
   /// A boolean flag to show or hide the loading spinner during payment processing.
   bool _showSpinner = false;
 
-  /// A boolean flag to enable or disable the payment button.
-  bool _isButtonDisabled = false;
-
   @override
   void initState() {
     super.initState();
 
     _validate();
-
-    setState(() {
-      _showWebViewWidget = Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PaymentSummary(
-              data: widget.data,
-              title: widget.paymentSummaryTitle,
-              icon: widget.defaultPaymentSummaryIcon,
-              child: widget.paymentSumarryWidget,
-            ),
-            // Pay Now Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isButtonDisabled
-                    ? null
-                    : () {
-                        setState(() {
-                          _isButtonDisabled = true;
-                        });
-                        _showWebView();
-                      },
-                style: widget.payButtonStyle ??
-                    ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Colors.blueAccent,
-                    ),
-                child: Text(
-                  widget.payButtonText ?? 'Pay Now',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    });
   }
 
   /// Validates specific fields to ensure they meet required criteria.
-  /// 
+  ///
   /// This method checks the following:
   /// 1. The `onsiteActivationScriptUrl` field must be a valid URL with an absolute path.
   /// 2. The `onsiteActivationScriptUrl` must start with `https` to ensure secure communication.
-  /// 
-  /// If the `onsiteActivationScriptUrl` fails validation, an exception is thrown, indicating 
-  /// the URL is invalid. This ensures that the PayFast integration functions correctly and 
+  ///
+  /// If the `onsiteActivationScriptUrl` fails validation, an exception is thrown, indicating
+  /// the URL is invalid. This ensures that the PayFast integration functions correctly and
   /// securely.
-  void _validate(){
-    bool _validURL = Uri.tryParse(widget.onsiteActivationScriptUrl)?.hasAbsolutePath ?? false;
-    if (!_validURL || ! widget.onsiteActivationScriptUrl.startsWith('https')){
+  void _validate() {
+    bool _validURL =
+        Uri.tryParse(widget.onsiteActivationScriptUrl)?.hasAbsolutePath ??
+            false;
+    if (!_validURL || !widget.onsiteActivationScriptUrl.startsWith('https')) {
       throw Exception('onsiteActivationScriptUrl URL not valid');
     }
   }
@@ -433,15 +414,11 @@ class _PayFastState extends State<PayFast> {
     return md5.convert(utf8.encode(paramString)).toString();
   }
 
-  void processPayment(){
-    print('invoked');
-  }
-
   /// Displays a WebView for processing payment.
   ///
-  /// The WebView loads a payment page using the unique identifier (`uuid`) 
-  /// retrieved from the payment system. It also handles navigation events, 
-  /// including tracking loading progress, completed or cancelled payments, 
+  /// The WebView loads a payment page using the unique identifier (`uuid`)
+  /// retrieved from the payment system. It also handles navigation events,
+  /// including tracking loading progress, completed or cancelled payments,
   /// and resource errors.
   void _showWebView() async {
     var response = await _requestPaymentIdentifier();
@@ -501,6 +478,7 @@ class _PayFastState extends State<PayFast> {
                 _showWebViewWidget = PaymentCompleted(
                   onPaymentCompleted: widget.onPaymentCompleted,
                   onPaymentCompletedText: widget.onPaymentCompletedText,
+                  shape: widget.onPaymentCompletedShapeBorder,
                   child: widget.paymentCompletedWidget,
                 );
               });
@@ -512,6 +490,7 @@ class _PayFastState extends State<PayFast> {
                 _showWebViewWidget = PaymentCancelled(
                   onPaymentCancelled: widget.onPaymentCancelled,
                   onPaymentCancelledText: widget.onPaymentCancelledText,
+                  shape: widget.onPaymentCancelledShapeBorder,
                   child: widget.paymentCancelledWidget,
                 );
               });
@@ -560,12 +539,66 @@ class _PayFastState extends State<PayFast> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (_showSpinner) WaitingOverlay(child: widget.waitingOverlayWidget),
-        // WebViewWidget fills the remaining space above the button
-        if (_showWebViewWidget != null) Expanded(child: _showWebViewWidget!),
-      ],
-    );
+    return Container(
+        color: widget.backgroundColor ?? Colors.transparent,
+        child: Column(
+          children: [
+            // Show spinner with AnimatedSwitcher
+            AnimatedSwitcher(
+              duration: widget.animatedSwitcherWidget?.getDuration() ??
+                  const Duration(milliseconds: 500),
+              transitionBuilder:
+                  widget.animatedSwitcherWidget?.getTransitionBuilder() ??
+                      (child, animation) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, 1), // Start off-screen
+                            end: Offset.zero, // End on-screen
+                          ).animate(animation),
+                          child: child,
+                        );
+                      },
+              child: _showSpinner
+                  ? WaitingOverlay(
+                      key: const ValueKey('WaitingOverlay'),
+                      child: widget.waitingOverlayWidget,
+                    )
+                  : const SizedBox.shrink(),
+            ),
+
+            // Content Switcher for WebView or SummaryWidget
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: widget.animatedSwitcherWidget?.getDuration() ??
+                    const Duration(milliseconds: 500),
+                transitionBuilder:
+                    widget.animatedSwitcherWidget?.getTransitionBuilder() ??
+                        (child, animation) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0, 1), // Start off-screen
+                              end: Offset.zero, // End on-screen
+                            ).animate(animation),
+                            child: child,
+                          );
+                        },
+                child: _showWebViewWidget != null
+                    ? _showWebViewWidget!
+                    : SummaryWidget(
+                        key: const ValueKey('SummaryWidget'),
+                        paymentSummaryWidget: PaymentSummary(
+                          data: widget.data,
+                          title: widget.paymentSummaryTitle,
+                          icon: widget.defaultPaymentSummaryIcon,
+                          child: widget.paymentSumarryWidget,
+                        ),
+                        onPayButtonPressed: _showWebView,
+                        payButtonStyle: widget.payButtonStyle,
+                        payButtonText: widget.payButtonText,
+                      ),
+              ),
+            ),
+          ],
+        ));
   }
 }

@@ -55,38 +55,39 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  
+
   @override
   void initState() {
     super.initState();
   }
 
-  String _randomId(){
+  String _randomId() {
     var rng = Random();
     var code = rng.nextInt(900000) + 100000;
 
     return '$code';
   }
 
-  void paymentCompleted(){
+  void paymentCompleted() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
           content: Text('Payment Successful!'),
           behavior: SnackBarBehavior.floating),
     );
-    
+
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => const MyApp()),
     );
   }
 
-  void paymentCancelled(){
+  void paymentCancelled() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-          content: Text('Payment Cancelled!'),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,),
+        content: Text('Payment Cancelled!'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.red,
+      ),
     );
 
     Navigator.push(
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    
+
     return Material(
       child: Scaffold(
         body: CupertinoPageScaffold(
@@ -125,34 +126,35 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     ListTile(
-                      title: const Text('Checkout using PayFast >>'),
-                      onTap: () => showCupertinoModalBottomSheet(
-                        expand: true,
-                        bounce: true,
-                        enableDrag: true,
-                        context: context,
-                        backgroundColor: Colors.white,
-                        builder: (context) => PayFast(
-                          data: {
-                            'merchant_id': 'xxxxxxxxxxxx',  
-                            'merchant_key': 'xxxxxxxxxxxx',
-                            'name_first': 'Yung',
-                            'name_last': 'Cet',
-                            'email_address': 'username@domain.com',
-                            'm_payment_id': _randomId(),
-                            'amount': '20',
-                            'item_name': '#0000002',
-                          }, 
-                          passPhrase: 'xxxxxxxxxxxxxxxxx', 
-                          useSandBox: true, // true to use Payfast sandbox, false to use their live server
-                          // if useSandbox is set to true, use a sandbox link
-                          // you can use the github link below or provide your own link
-                          onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
-                          onPaymentCancelled: () => paymentCancelled(),
-                          onPaymentCompleted: () => paymentCompleted(),
-                        ),
-                      )
-                    ),
+                        title: const Text('Checkout using PayFast >>'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: true,
+                              bounce: true,
+                              enableDrag: true,
+                              context: context,
+                              backgroundColor: Colors.white,
+                              builder: (context) => PayFast(
+                                data: {
+                                  'merchant_id': 'xxxxxxxxxxx',
+                                  'merchant_key': 'xxxxxxxxxxxxxxxx',
+                                  'name_first': 'Yung',
+                                  'name_last': 'Cet',
+                                  'email_address': 'young.cet@gmail.com',
+                                  'm_payment_id': _randomId(),
+                                  'amount': '20',
+                                  'item_name': '#0000002',
+                                },
+                                passPhrase: 'xxxxxxxxxxxxxx',
+                                useSandBox:
+                                    true, // true to use Payfast sandbox, false to use their live server
+                                // if useSandbox is set to true, use a sandbox link
+                                // you can use the github link below or provide your own link
+                                onsiteActivationScriptUrl:
+                                    'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
+                                onPaymentCancelled: () => paymentCancelled(),
+                                onPaymentCompleted: () => paymentCompleted(),
+                              ),
+                            )),
                   ],
                 ),
               ),

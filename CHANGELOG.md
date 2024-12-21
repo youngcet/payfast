@@ -1,7 +1,19 @@
+## 0.0.4
+
+- Added new properties
+    - **`onPaymentCompletedShapeBorder`** An optional property that defines the shape of the `onPaymentCompleted` widget's border.
+
+    - **`onPaymentCancelledShapeBorder`** An optional property that defines the shape of the `onPaymentCancelled` widget's border.
+    - **`animatedSwitcherWidget`** An optional property that allows you to pass customizable animation duration and transition builder parameters to override the current animation. This uses the `AnimatedSwitcher` animation.
+    - **backgroundColor** The background color for the payment summary widget widget.
+- Added FlutterFlow integration Widget & demonstration 
+- Added animation and transition effects for enhanced UI interactions.
+
+
 ## 0.0.3
 
 - Updated README
-- Added **onsiteActivationScriptUrl** links to use for development/testing
+- Added **onsiteActivationScriptUrl** Github links to use for development/testing
 
 ## 0.0.2
 

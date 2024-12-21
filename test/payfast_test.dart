@@ -95,14 +95,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  void _ping() async {
-    var payfast = PayFastApi(
-        merchantId: '', merchantKey: '', passPhrase: '', useSandBox: true);
-
-    String ping = await payfast.ping();
-    print(ping);
-  }
-
   String _randomId() {
     var rng = Random();
     var code = rng.nextInt(900000) + 100000;
@@ -142,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             passPhrase: 'uRDAPr2pjfNTqXad6w0r',
             useSandBox: true,
-            onsiteActivationScriptUrl: 'http://somedomain.com',
+            onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
             onPaymentCancelled: () => closeModal(),
             onPaymentCompleted: () => closeModal(),
           ),
