@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, this.processPayment});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -47,6 +47,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final Function? processPayment;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -147,15 +148,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         builder: (context) => PayFast(
                           data: {
                             'merchant_id': 'xxxxxxxxxxxx',  
+<<<<<<< HEAD
                             'merchant_key': 'xxxxxxxxxxxx',
+=======
+                            'merchant_key': 'xxxxxxxxxxxxxxxxx',
+>>>>>>> parent of 16c9226 (updated readme)
                             'name_first': 'Yung',
                             'name_last': 'Cet',
-                            'email_address': 'young.cet@gmail.com',
+                            'email_address': 'username@domain.com',
                             'm_payment_id': _randomId(),
                             'amount': '20',
                             'item_name': '#0000002',
                           }, 
+<<<<<<< HEAD
                           passPhrase: 'xxxxxxxxxxxxxxxxx', 
+=======
+                          passPhrase: 'xxxxxxxxxxxx', 
+>>>>>>> parent of 16c9226 (updated readme)
                           useSandBox: true, // true to use Payfast sandbox, false to use their live server
                           // if useSandbox is set to true, use a sandbox link
                           // you can use the github link below or provide your own link
