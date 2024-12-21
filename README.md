@@ -650,7 +650,8 @@ class _PayFastWidgetState extends State<PayFastWidget> {
         onsiteActivationScriptUrl: widget.onsiteActivationScriptUrl,
         onPaymentCancelled: () => widget.onPaymentCancelled(), 
         onPaymentCompleted: () => widget.onPaymentCompleted(),
-        paymentSumarryWidget: _paymentSummary(),
+        paymentSumarryWidget: _paymentSummary(), // pass widget
+        // add other parameters as needed
       ))),
     );
   }
