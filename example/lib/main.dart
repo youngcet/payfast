@@ -59,19 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-
-  }
-
-  void _ping()async {
-    var payfast = PayFastApi(
-      merchantId: '', 
-      merchantKey: '', 
-      passPhrase: '', 
-      useSandBox: true
-    );
-    
-    String ping = await payfast.ping();
-    print(ping);
   }
 
   String _randomId(){
@@ -148,11 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         builder: (context) => PayFast(
                           data: {
                             'merchant_id': 'xxxxxxxxxxxx',  
-<<<<<<< HEAD
                             'merchant_key': 'xxxxxxxxxxxx',
-=======
-                            'merchant_key': 'xxxxxxxxxxxxxxxxx',
->>>>>>> parent of 16c9226 (updated readme)
                             'name_first': 'Yung',
                             'name_last': 'Cet',
                             'email_address': 'username@domain.com',
@@ -160,11 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             'amount': '20',
                             'item_name': '#0000002',
                           }, 
-<<<<<<< HEAD
                           passPhrase: 'xxxxxxxxxxxxxxxxx', 
-=======
-                          passPhrase: 'xxxxxxxxxxxx', 
->>>>>>> parent of 16c9226 (updated readme)
                           useSandBox: true, // true to use Payfast sandbox, false to use their live server
                           // if useSandbox is set to true, use a sandbox link
                           // you can use the github link below or provide your own link
