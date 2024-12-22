@@ -235,21 +235,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  
-  @override
-  void initState() {
-    super.initState();
-
-  }
-
-  String _randomId(){
-    var rng = Random();
-    var code = rng.nextInt(900000) + 100000;
-
-    return '$code';
-  }
-
   void paymentCompleted(){
     print('payment completed');
   }
