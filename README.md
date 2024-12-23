@@ -44,6 +44,9 @@ A Flutter package to integrate PayFast payments into your app.
   * [onPaymentCompleted](#onpaymentcompleted)
   * [onPaymentCancelled](#onpaymentcancelled)
   * [paymentSumarryWidget](#paymentsumarrywidget)
+  * [defaultPaymentSummaryIcon](#defaultPaymentSummaryIcon)
+  * [paymentSummaryAmountColor](#paymentSummaryAmountColor)
+  * [itemSummarySectionLeadingWidget](#itemSummarySectionLeadingWidget)
   * [payButtonStyle](#paybuttonstyle)
   * [payButtonText](#paybuttontext)
   * [paymentCompletedWidget](#paymentcompletedwidget)
@@ -262,7 +265,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 'email_address': 'username@domain.com', // email address
                 'm_payment_id': '7663668635664', // payment id
                 'amount': '50', // amount
-                'item_name': '#0000002', // item name
+                'item_name': '#0000002', // item name (should be one word, no spaces)
+                'additional_text': 'Subscription Fee for services rendered', // optional, only used on the payment details, not passed to PayFast
             }, 
             passPhrase: 'xxxxxxxxxxxxxxx',  // Your payfast passphrase
             useSandBox: true, // true to use Payfast sandbox, false to use their live server
@@ -521,7 +525,8 @@ PayFast(
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       textStyle: TextStyle(backgroundColor: Colors.black)
-    )
+    ),
+    payButtonLeadingWidget: const Icon(Icons.payments), // set an icon next to the 'button text'
 ) 
 ```
 
@@ -776,6 +781,7 @@ PayFast(
   - `amount`
   - `item_name`
   - `m_payment_id`
+  - `additional_text` (optional - used for payment details page)
 
 ### `onsiteActivationScriptUrl`:  
   The html file URL used for onsite payment activation.
@@ -794,11 +800,23 @@ PayFast(
 ### `paymentSumarryWidget`:  
   A custom widget to display the payment summary before the user proceeds with the payment.
 
+### `defaultPaymentSummaryIcon`:
+  An icon to display next to the payment summary item details.
+
+### `paymentSummaryAmountColor`:
+  The amount text color on the payment summary page
+
+### `itemSummarySectionLeadingWidget`:
+  A custom widget to display next to the payment summary item details.
+
 ### `payButtonStyle`:  
   The style of the "Pay Now" button.
 
 ### `payButtonText`:  
   The text displayed on the "Pay Now" button.
+
+### `payButtonLeadingWidget`:
+  The widget displayed next to the "Pay Now" button.
 
 ### `paymentCompletedWidget`:  
   A custom widget to show after the payment is successfully completed.
@@ -812,7 +830,7 @@ PayFast(
 ### `backgroundColor`:  
   A background color of the payment summary page
 
-### `animatedSwitcherWidget`
+### `animatedSwitcherWidget`:
 The `animatedSwitcherWidget` object allows you to pass customizable animation duration and transition builder parameters to override the current animation. This uses the `AnimatedSwitcher` animation.
 
 **Parameters**
@@ -848,7 +866,7 @@ Looking for support, updates, or a place to discuss the **PayFast Flutter Packag
 
 👉 [Join the `#payfast-flutter-package` channel](https://discord.gg/ZtszaC7r)
 
-### What You’ll Find:
+### What You'll Find:
 - **Help & Support**: Get assistance with integrating and using the package.
 - **Feature Discussions**: Share ideas for new features or improvements.
 - **Bug Reports**: Report issues and collaborate on fixes.

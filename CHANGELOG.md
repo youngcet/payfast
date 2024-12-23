@@ -1,3 +1,20 @@
+## 0.0.5
+
+- Added new properties
+    - **`additional_text`** An optional property that for additional text in `data` object.
+        - `merchant_id`
+        - `merchant_key`
+        - `name_first`
+        - `name_last`
+        - `amount`
+        - `item_name`
+        - `m_payment_id`
+        - `additional_text` (optional - used for payment details page)
+    - **`defaultPaymentSummaryIcon`** An icon to display next to the payment summary item details.
+    - **`itemSummarySectionLeadingWidget`** A custom widget to display next to the payment summary item details.
+    - **`paymentSummaryAmountColor`** Set the total amount text color on the payment summary page
+- Updated the payment summary details UI.
+
 ## 0.0.4
 
 - Added new properties

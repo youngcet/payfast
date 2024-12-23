@@ -23,22 +23,18 @@ class WaitingOverlay extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            SizedBox(height: 100),
-            Center(
+          children: [
+            const SizedBox(height: 100),
+            const Center(
               child: CircularProgressIndicator(
                 backgroundColor: Colors.redAccent,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'Please wait...',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  decoration: TextDecoration.none,
-                  color: Colors.black),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.normal),
             ),
           ],
         );
