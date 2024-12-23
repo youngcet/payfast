@@ -49,6 +49,10 @@ A Flutter package to integrate PayFast payments into your app.
   * [paymentCompletedWidget](#paymentcompletedwidget)
   * [paymentCancelledWidget](#paymentcancelledwidget)
   * [waitingOverlayWidget](#waitingoverlaywidget)
+  * [backgroundColor](#backgroundcolor)
+  * [animatedSwitcherWidget](#animatedswitcherwidget)
+  * [onPaymentCompletedShapeBorder](#onpaymentcompletedshapeborder)
+  * [onPaymentCancelledShapeBorder](#onpaymentcancelledshapeborder)
 
 
 ### Demo
@@ -835,7 +839,22 @@ This package allows you to easily integrate PayFast into your Flutter project an
 
 ## Contributing
 
+### Github Repository
 If you have ideas or improvements for this package, we welcome contributions. Please open an issue or create a pull request on our [GitHub repository](https://github.com/youngcet/payfast).
+
+### Join Our Community on Discord! 🎮
+
+Looking for support, updates, or a place to discuss the **PayFast Flutter Package**? Join our dedicated Discord channel!
+
+👉 [Join the `#payfast-flutter-package` channel](https://discord.gg/ZtszaC7r)
+
+### What You’ll Find:
+- **Help & Support**: Get assistance with integrating and using the package.
+- **Feature Discussions**: Share ideas for new features or improvements.
+- **Bug Reports**: Report issues and collaborate on fixes.
+- **Community Interaction**: Engage with fellow developers working on Flutter projects.
+
+We look forward to seeing you there! 🚀
 
 ## License
 
