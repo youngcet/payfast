@@ -248,6 +248,19 @@ class PayFast extends StatefulWidget {
   /// An optional property that defines the shape of the `onPaymentCancelled` widget's border.
   final ShapeBorder? onPaymentCancelledShapeBorder;
 
+  /// An optional leading widget to display next to the payment summary details.
+  /// Defaults to a shopping bag icon.
+  final Widget? itemSummarySectionLeadingWidget;
+
+  /// The icon displayed on the "Pay Now" button.
+  ///
+  /// You can customize this to match your application’s context or language.
+  final Widget? payButtonLeadingWidget;
+
+  /// An optional color set to the amount displayed.
+  /// Defaults blue.
+  final Color? paymentSummaryAmountColor;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -269,7 +282,9 @@ class PayFast extends StatefulWidget {
     this.backgroundColor,
     this.animatedSwitcherWidget,
     this.onPaymentCompletedShapeBorder,
-    this.onPaymentCancelledShapeBorder,
+    this.onPaymentCancelledShapeBorder, 
+    this.itemSummarySectionLeadingWidget, 
+    this.payButtonLeadingWidget, this.paymentSummaryAmountColor,
   })  : assert(data.containsKey('merchant_id'),
             'Missing required key: merchant_id'),
         assert(data.containsKey('merchant_key'),
@@ -287,7 +302,7 @@ class PayFast extends StatefulWidget {
             data.containsKey('item_name'), 'Missing required key: item_name');
 
   @override
-  _PayFastState createState() => _PayFastState();
+  State<PayFast> createState() => _PayFastState();
 }
 
 class _PayFastState extends State<PayFast> {
@@ -444,7 +459,6 @@ class _PayFastState extends State<PayFast> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            debugPrint('WebView is loading (progress : $progress%)');
             if (progress < 100) {
               setState(() {
                 _showSpinner = true;
@@ -456,10 +470,10 @@ class _PayFastState extends State<PayFast> {
             }
           },
           onPageStarted: (String url) {
-            debugPrint('Page started loading: $url');
+            
           },
           onPageFinished: (String url) {
-            debugPrint('Page finished loading: $url');
+            
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint('''
@@ -471,8 +485,6 @@ class _PayFastState extends State<PayFast> {
                       ''');
           },
           onNavigationRequest: (NavigationRequest request) async {
-            debugPrint('url loaded: ${request.url}');
-
             if (request.url.contains(Constants.completed)) {
               setState(() {
                 _showWebViewWidget = PaymentCompleted(
@@ -500,7 +512,6 @@ class _PayFastState extends State<PayFast> {
             return NavigationDecision.navigate;
           },
           onUrlChange: (UrlChange change) {
-            debugPrint('url change to ${change.url}');
             if (change.url != null) {}
           },
         ),
@@ -590,11 +601,14 @@ class _PayFastState extends State<PayFast> {
                           data: widget.data,
                           title: widget.paymentSummaryTitle,
                           icon: widget.defaultPaymentSummaryIcon,
+                          itemSectionLeadingWidget: widget.itemSummarySectionLeadingWidget,
+                          paymentSummaryAmountColor: widget.paymentSummaryAmountColor,
                           child: widget.paymentSumarryWidget,
                         ),
                         onPayButtonPressed: _showWebView,
                         payButtonStyle: widget.payButtonStyle,
                         payButtonText: widget.payButtonText,
+                        payButtonLeadingWidget: widget.payButtonLeadingWidget,
                       ),
               ),
             ),

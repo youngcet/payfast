@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.processPayment});
+  const MyHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -47,7 +47,6 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final Function? processPayment;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -133,18 +132,17 @@ class _MyHomePageState extends State<MyHomePage> {
                               backgroundColor: Colors.white,
                               builder: (context) => PayFast(
                                 data: {
-                                  'merchant_id': 'xxxxxxxxxxx',
+                                  'merchant_id': 'xxxxxxxxxxxxxx',
                                   'merchant_key': 'xxxxxxxxxxxxxxxx',
                                   'name_first': 'Yung',
                                   'name_last': 'Cet',
                                   'email_address': 'young.cet@gmail.com',
                                   'm_payment_id': _randomId(),
                                   'amount': '20',
-                                  'item_name': '#0000002',
+                                  'item_name': 'Subscription',
                                 },
-                                passPhrase: 'xxxxxxxxxxxxxx',
-                                useSandBox:
-                                    true, // true to use Payfast sandbox, false to use their live server
+                                passPhrase: 'xxxxxxxxxxxxxxxxx',
+                                useSandBox: true, // true to use Payfast sandbox, false to use their live server
                                 // if useSandbox is set to true, use a sandbox link
                                 // you can use the github link below or provide your own link
                                 onsiteActivationScriptUrl:
@@ -163,3 +161,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
