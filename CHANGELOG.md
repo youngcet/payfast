@@ -1,3 +1,15 @@
+## 0.0.6
+- Deprecated
+    - **`additional_text`** An optional property that for additional text in `data` object.
+        - `merchant_id`
+        - `merchant_key`
+        - `name_first`
+        - `name_last`
+        - `amount`
+        - `item_name`
+        - `m_payment_id`
+        - `additional_text` (deprecated)
+
 ## 0.0.5
 
 - Added new properties

@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'amount': '50',
               'item_name': '#0000002',
             },
-            passPhrase: 'uRDAPr2pjfNTqXad6w0r',
+            passPhrase: 'xxxxxxxxxxxxxx',
             useSandBox: true,
             onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
             onPaymentCancelled: () => closeModal(),

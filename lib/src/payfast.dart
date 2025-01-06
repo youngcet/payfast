@@ -373,6 +373,7 @@ class _PayFastState extends State<PayFast> {
     String paramString = _dataToString(data);
 
     var response = await http.post(Uri.parse('$endpointUrl?$paramString'));
+    
     if (response.statusCode == 200) {
       jsonResponse = jsonDecode(response.body);
     } else {
@@ -438,7 +439,7 @@ class _PayFastState extends State<PayFast> {
   void _showWebView() async {
     var response = await _requestPaymentIdentifier();
     paymentIdentifier = response['uuid'];
-
+    
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
