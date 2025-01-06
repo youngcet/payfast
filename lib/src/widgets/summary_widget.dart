@@ -49,6 +49,9 @@ class _SummaryPageState extends State<SummaryWidget> {
     );
   }
 
+  /// A function that returns a widget that is displayed next to the "Pay Now" button.
+  ///
+  /// You can customize this to match your application’s context or language.
   Widget _icon(){
     return widget.payButtonLeadingWidget ?? Container();
   }
