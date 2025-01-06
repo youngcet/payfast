@@ -266,7 +266,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 'm_payment_id': '7663668635664', // payment id
                 'amount': '50', // amount
                 'item_name': '#0000002', // item name (should be one word, no spaces)
-                'additional_text': 'Subscription Fee for services rendered', // optional, only used on the payment details, not passed to PayFast
             }, 
             passPhrase: 'xxxxxxxxxxxxxxx',  // Your payfast passphrase
             useSandBox: true, // true to use Payfast sandbox, false to use their live server
@@ -781,7 +780,6 @@ PayFast(
   - `amount`
   - `item_name`
   - `m_payment_id`
-  - `additional_text` (optional - used for payment details page)
 
 ### `onsiteActivationScriptUrl`:  
   The html file URL used for onsite payment activation.
