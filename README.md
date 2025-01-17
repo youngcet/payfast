@@ -862,7 +862,7 @@ If you have ideas or improvements for this package, we welcome contributions. Pl
 
 Looking for support, updates, or a place to discuss the **PayFast Flutter Package**? Join our dedicated Discord channel!
 
-👉 [Join the `#payfast-flutter-package` channel](https://discord.gg/ZtszaC7r)
+👉 [Join the `#payfast-flutter-package` channel](https://discord.gg/Gh9J5sns)
 
 ### What You'll Find:
 - **Help & Support**: Get assistance with integrating and using the package.
