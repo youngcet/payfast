@@ -23,7 +23,7 @@ A Flutter package to integrate PayFast payments into your app.
 
 - [Getting Started](#getting-started)
   * [Usage](#usage)
-  * [Payfast Onsite Activation Script](#payfast-onsite-activation-script)
+  * [PayFast Onsite Activation Script](#payfast-onsite-activation-script)
     * [Hosting on Gihub](#hosting-on-github)
     * [Hosting on a different server](#hosting-on-a-different-server)
   * [Android & IOS Setup](#android-and-ios-setup)
@@ -56,6 +56,10 @@ A Flutter package to integrate PayFast payments into your app.
   * [animatedSwitcherWidget](#animatedswitcherwidget)
   * [onPaymentCompletedShapeBorder](#onpaymentcompletedshapeborder)
   * [onPaymentCancelledShapeBorder](#onpaymentcancelledshapeborder)
+  * [paymentCancelledTitle](#paymentcancelledtitle)
+  * [paymentCancelledButtonText](#paymentcancelledbuttontext)
+  * [paymentCompletedButtonText](#paymentcompletedbuttontext)
+  * [paymentCompletedTitle](#paymentcompletedtitle)
 
 
 ### Demo
@@ -65,7 +69,7 @@ A Flutter package to integrate PayFast payments into your app.
 
 ## Getting Started
 
-This package uses Payfast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
+This package uses PayFast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
 
 ## PayFast Onsite Activation Script
 
@@ -96,7 +100,7 @@ Copy the `html` file below and host it on a secure server:
     <script>
             // DO NOT MODIFY THE CODE BELOW
 
-            // retrieve the uuid that is passed to this file and send it to payfast onsite engine
+            // retrieve the uuid that is passed to this file and send it to PayFast onsite engine
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const uuid = urlParams.get('uuid');
@@ -123,7 +127,7 @@ Alternatively, you can create your own `html` file but make sure to include the 
 ```html
 <script src="https://sandbox.payfast.co.za/onsite/engine.js"></script> 
 <script>
-    // retrieve the uuid that is passed to this file and send it to payfast onsite engine
+    // retrieve the uuid that is passed to this file and send it to PayFast onsite engine
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const uuid = urlParams.get('uuid');
@@ -141,7 +145,7 @@ Alternatively, you can create your own `html` file but make sure to include the 
 </script>
 ```
 
-To point to a live server, simply change `<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>` tag to `<script src="https://www.payfast.co.za/onsite/engine.js"></script>`. Take note of the url where the `html` file is hosted, you're going pass it along in the Payfast package. 
+To point to a live server, simply change `<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>` tag to `<script src="https://www.payfast.co.za/onsite/engine.js"></script>`. Take note of the url where the `html` file is hosted, you're going pass it along in the PayFast package. 
 
 We have to host the file because for security reasons 'Onsite Payments' requires that your application be served over HTTPS. For more detailed documentation, please refer to the official [PayFast Onsite Payments documentation](https://developers.payfast.co.za/docs#onsite_payments). 
 
@@ -291,11 +295,11 @@ The code above will show you the screen below:
 
 ### Onsite Payments
 
-Integrate Payfast's secure payment engine directly into the checkout page. Important: Please note that this is currently in Beta according to Payfast's documentation, however, it works fine.
+Integrate PayFast's secure payment engine directly into the checkout page. Important: Please note that this is currently in Beta according to PayFast's documentation, however, it works fine.
 
 ### Sandbox or Live Environment integration
 
-Configure whether to use PayFast's sandbox or live server. When you choose to use the sandbox or live server, ensure that the hosted `html` file also points to the server's onsite activation script (`<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>`) and the Payfast merchant id and key corresponds to the appropiate server.
+Configure whether to use PayFast's sandbox or live server. When you choose to use the sandbox or live server, ensure that the hosted `html` file also points to the server's onsite activation script (`<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>`) and the PayFast merchant id and key corresponds to the appropiate server.
 
 ```dart
 PayFast(
@@ -598,7 +602,7 @@ To integrate with FluterFlow,
 <img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_widget_settings.png?raw=true" alt="FlutterFlow Settings" width="280"/>
 
 
-4. Add **payfast: ^latest_version** to the dependencies and refresh the UI (replace latest_version with the latest version).
+4. Add **PayFast: ^latest_version** to the dependencies and refresh the UI (replace latest_version with the latest version).
 
 <img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_dependency.png?raw=true" alt="FlutterFlow Dependency" width="280"/>
 
@@ -846,6 +850,18 @@ An optional property that defines the shape of the `onPaymentCompleted` widget's
 
 ### `onPaymentCancelledShapeBorder`
 An optional property that defines the shape of the `onPaymentCancelled` widget's border.
+
+### `paymentCancelledButtonText`
+An optional text displayed on the button on the payment cancelled screen (default text is continue).
+
+### `paymentCancelledTitle`
+An optional text displayed at the top of the payment cancelled screen.
+
+### `paymentCompletedButtonText`
+An optional text displayed on the button on the payment completed screen (default text is continue).
+
+### `paymentCompletedTitle`
+An optional text displayed at the top of the payment completed screen.
 
 
 ## Conclusion

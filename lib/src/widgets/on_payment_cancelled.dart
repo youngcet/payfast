@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 ///   Defaults to a detailed message about the cancellation.
 /// - [onPaymentCancelled]: A required callback function that is executed when the
 ///   "Continue" button is pressed.
+/// - [paymentCancelledButtonText]: Optional text for the button (default text is continue)
+/// - [paymentCancelledTitle]: Optional text displayed at the top of the screen.
 /// - [child]: An optional custom widget to replace the default UI. If provided, the
 ///   child widget will be rendered instead of the default card layout.
 /// - [ShapeBorder]: An optional property that defines the shape of the widget's border.
@@ -31,10 +33,18 @@ class PaymentCancelled extends StatelessWidget {
   /// An optional property that defines the shape of the widget's border.
   final ShapeBorder? shape;
 
+  /// The text displayed on the button (default text is continue).
+  final String? paymentCancelledButtonText;
+
+  /// The text displayed at the top of the screen.
+  final String? paymentCancelledTitle;
+
   const PaymentCancelled({
     super.key,
     this.onPaymentCancelledText,
     required this.onPaymentCancelled,
+    this.paymentCancelledButtonText,
+    this.paymentCancelledTitle,
     this.child,
     this.shape,
   });
@@ -65,9 +75,9 @@ class PaymentCancelled extends StatelessWidget {
                     size: 100,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Payment Cancelled!',
-                    style: TextStyle(
+                  Text(
+                    paymentCancelledTitle ?? 'Payment Cancelled!',
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -93,9 +103,9 @@ class PaymentCancelled extends StatelessWidget {
                           horizontal: 30, vertical: 15),
                       backgroundColor: Colors.redAccent,
                     ),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
+                    child: Text(
+                      paymentCancelledButtonText ?? 'Continue',
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.white,
                       ),
