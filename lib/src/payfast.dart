@@ -98,8 +98,6 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 /// 
 /// - **[paymentCompletedTitle]** *(String?)*: The text displayed at the top of the screen.
 ///
-///
-///
 /// ### Example Usage
 ///
 /// ```dart
