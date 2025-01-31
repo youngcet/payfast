@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 ///   Defaults to a thank-you message for the user.
 /// - [onPaymentCompleted]: A required callback function that is executed when the
 ///   "Continue" button is pressed.
+/// - [paymentCompletedButtonText]: Optional text for the button (default text is continue)
+/// - [paymentCompletedTitle]: Optional text displayed at the top of the screen.
 /// - [child]: An optional custom widget to replace the default UI. If provided, the
 ///   child widget will be rendered instead of the default card layout.
 /// - [ShapeBorder]: An optional property that defines the shape of the widget's border.
@@ -31,10 +33,18 @@ class PaymentCompleted extends StatelessWidget {
   /// An optional property that defines the shape of the widget's border.
   final ShapeBorder? shape;
 
+  /// The text displayed on the button (default text is continue).
+  final String? paymentCompletedButtonText;
+
+  /// The text displayed at the top of the screen.
+  final String? paymentCompletedTitle;
+
   const PaymentCompleted(
       {super.key,
       this.onPaymentCompletedText,
       required this.onPaymentCompleted,
+      this.paymentCompletedButtonText,
+      this.paymentCompletedTitle,
       this.child,
       this.shape});
 
@@ -63,9 +73,9 @@ class PaymentCompleted extends StatelessWidget {
                     size: 100,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Payment Successful!',
-                    style: TextStyle(
+                  Text(
+                    paymentCompletedTitle ?? 'Payment Successful!',
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -91,9 +101,9 @@ class PaymentCompleted extends StatelessWidget {
                           horizontal: 30, vertical: 15),
                       backgroundColor: Colors.green,
                     ),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
+                    child: Text(
+                      paymentCompletedButtonText ?? 'Continue',
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.white,
                       ),

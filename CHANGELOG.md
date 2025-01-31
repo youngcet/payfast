@@ -1,6 +1,6 @@
-## 0.0.6
-- Deprecated
-    - **`additional_text`** An optional property that for additional text in `data` object.
+## 0.0.6 - 2025-01-31
+- **DEPRECATED** 
+    - **`additional_text`** An optional property that for additional text in `data`    object.
         - `merchant_id`
         - `merchant_key`
         - `name_first`
@@ -9,6 +9,20 @@
         - `item_name`
         - `m_payment_id`
         - `additional_text` (deprecated)
+- Added
+
+  - Payment Flow Customization
+    Introduced new parameters for localized/custom payment status screen content:
+
+       - `paymentCancelledButtonText`: Customize the button text on payment cancellation screens
+          Default: "Continue"
+
+       - `paymentCancelledTitle`: Set a custom title for payment cancellation screens
+
+       - `paymentCompletedButtonText`: Override the completion screen button text
+        Default: "Continue"
+
+       - `paymentCompletedTitle`: Define a custom title for successful payment screens
 
 ## 0.0.5
 
@@ -52,7 +66,7 @@
 
 ## Features
 
-- **Supports Sandbox and Live Environment:** Configure whether to use PayFast's sandbox or live server.
+- **Supports Sandbox and Live Environment:** Configure whether to use Payfast's sandbox or live server.
 - **Customizable Payment Button:** Provides a customizable payment button for users to initiate the payment.
 - **Payment Summary:** Displays the payment summary widget before the user proceeds to payment.
 - **Callbacks for Payment Status:** Customizable callback functions for when the payment is completed or cancelled.

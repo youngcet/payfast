@@ -89,6 +89,16 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 ///
 /// - **[backgroundColor]** *(Icon?)*: The default background color in the
 ///   payment summary section. Can be customized to match the app's theme.
+/// 
+/// - **[paymentCancelledButtonText]** *(String?)*: The text displayed on the button (default text is continue).
+///
+/// - **[paymentCancelledTitle]** *(String?)*: The text displayed at the top of the screen.
+///
+/// - **[paymentCompletedButtonText]** *(String?)*: The text displayed on the button (default text is continue).
+/// 
+/// - **[paymentCompletedTitle]** *(String?)*: The text displayed at the top of the screen.
+///
+///
 ///
 /// ### Example Usage
 ///
@@ -261,6 +271,18 @@ class PayFast extends StatefulWidget {
   /// Defaults blue.
   final Color? paymentSummaryAmountColor;
 
+  /// The text displayed on the button (default text is continue).
+  final String? paymentCompletedButtonText;
+
+  /// The text displayed at the top of the screen.
+  final String? paymentCompletedTitle;
+
+  /// The text displayed on the button (default text is continue).
+  final String? paymentCancelledButtonText;
+
+  /// The text displayed at the top of the screen.
+  final String? paymentCancelledTitle;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -270,6 +292,7 @@ class PayFast extends StatefulWidget {
     required this.onPaymentCompleted,
     this.onPaymentCancelledText,
     this.onPaymentCompletedText,
+    this.paymentCancelledButtonText,
     this.paymentSumarryWidget,
     this.payButtonStyle,
     this.payButtonText,
@@ -284,7 +307,11 @@ class PayFast extends StatefulWidget {
     this.onPaymentCompletedShapeBorder,
     this.onPaymentCancelledShapeBorder, 
     this.itemSummarySectionLeadingWidget, 
-    this.payButtonLeadingWidget, this.paymentSummaryAmountColor,
+    this.payButtonLeadingWidget, 
+    this.paymentSummaryAmountColor, 
+    this.paymentCompletedButtonText, 
+    this.paymentCompletedTitle, 
+    this.paymentCancelledTitle,
   })  : assert(data.containsKey('merchant_id'),
             'Missing required key: merchant_id'),
         assert(data.containsKey('merchant_key'),
@@ -492,6 +519,8 @@ class _PayFastState extends State<PayFast> {
                   onPaymentCompleted: widget.onPaymentCompleted,
                   onPaymentCompletedText: widget.onPaymentCompletedText,
                   shape: widget.onPaymentCompletedShapeBorder,
+                  paymentCompletedButtonText: widget.paymentCompletedButtonText,
+                  paymentCompletedTitle: widget.paymentCompletedTitle,
                   child: widget.paymentCompletedWidget,
                 );
               });
@@ -504,6 +533,8 @@ class _PayFastState extends State<PayFast> {
                   onPaymentCancelled: widget.onPaymentCancelled,
                   onPaymentCancelledText: widget.onPaymentCancelledText,
                   shape: widget.onPaymentCancelledShapeBorder,
+                  paymentCancelledButtonText: widget.paymentCancelledButtonText,
+                  paymentCancelledTitle: widget.paymentCancelledTitle,
                   child: widget.paymentCancelledWidget,
                 );
               });
