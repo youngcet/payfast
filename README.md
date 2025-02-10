@@ -68,11 +68,6 @@ A Flutter package to integrate PayFast payments into your app.
   * [paymentCompletedTitle](#paymentcompletedtitle)
 
 
-### Demo
-
-[Watch the demo video](https://permanentlink.co.za/payment/demo.mp4)
-
-
 ## Getting Started
 
 This package uses PayFast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
@@ -155,16 +150,10 @@ To point to a live server, simply change `<script src="https://sandbox.payfast.c
 
 We have to host the file because for security reasons 'Onsite Payments' requires that your application be served over HTTPS. For more detailed documentation, please refer to the official [PayFast Onsite Payments documentation](https://developers.payfast.co.za/docs#onsite_payments). 
 
-Onsite Sandbox sample:
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/sandbox.png?raw=true" alt="Sandbox Screenshot" width="280"/>
-
-
-Onsite Live sample:
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/live.png?raw=true" alt="Live Screenshot" width="280"/>
-
-
+<p align="left">
+<img src="https://github.com/youngcet/payfast/blob/main/doc/sandbox.png?raw=true" alt="Sandbox Screenshot" height="600" width="280" style="border:1px solid grey"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/live.png?raw=true" alt="Live Screenshot" height="600" width="280" style="border:1px solid grey"/>
+</p>
 
 ## Usage
 
@@ -293,7 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 The code above will show you the screen below:
 
-<img src="https://github.com/youngcet/payfast/blob/main/doc/basic_app_screenshot.png?raw=true" alt="Basic App Screenshot" width="280"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/basic_app_screenshot.png?raw=true" alt="Basic App Screenshot" height="600" width="280"/>
 
 
 
@@ -330,9 +319,10 @@ PayFast(
 ) 
 ```
 
-<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed.png?raw=true" alt="Payment Completed" width="280"/>
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled.png?raw=true" alt="Payment Cancelled" width="280"/>
+<p align="left">
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed.png?raw=true" alt="Payment Completed" width="280" height="600" style="border:1px solid grey"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled.png?raw=true" alt="Payment Cancelled" width="280" height="600" style="border:1px solid grey"/>
+</p>
 
 
 You can change the default text of the default widgets using `onPaymentCompletedText` and `onPaymentCancelledText` properties, respectively:
@@ -362,10 +352,10 @@ PayFast(
 ) 
 ```
 
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_text.png?raw=true" alt="Payment Completed Text" width="280"/>
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_text.png?raw=true" alt="Payment Cancelled Text" width="280"/>
+<p>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_text.png?raw=true" alt="Payment Completed Text" width="280" height="600" style="border:1px solid grey"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_text.png?raw=true" alt="Payment Cancelled Text" width="280" height="600" style="border:1px solid grey"/>
+</p>
 
 
 Alternatively, you can override the widgets with your own widget:
@@ -435,10 +425,10 @@ PayFast(
 ) 
 ```
 
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_widget.png?raw=true" alt="Payment Completed Widget" width="280"/>
-
-<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_widget.png?raw=true" alt="Payment Cancelled Widget" width="280"/>
+<p>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_completed_widget.png?raw=true" alt="Payment Completed Widget" width="280" height="600" style="border:1px solid grey"/>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/payment_cancelled_widget.png?raw=true" alt="Payment Cancelled Widget" width="280" height="600" style="border:1px solid grey"/>
+</p>
 
 
 ### Customizable Payment Summary Widget
@@ -740,8 +730,10 @@ To test the payment flow, make sure that the useSandBox flag is set to true in t
 Use the provided sandbox URL (https://youngcet.github.io/sandbox_payfast_onsite_payments/) or replace it with your own sandbox testing URL. **Deploy the app to an iOS or Android device (emulator) for testing.**
 
 
+<p>
+<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_02.png?raw=true" alt="FlutterFlow PayFast Widget" style="width:100%"/>
+</p>
 
-<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_02.png?raw=true" alt="FlutterFlow PayFast Widget" width="600"/>
 
 
 ### Customizable Animation
