@@ -21,6 +21,11 @@ A Flutter package to integrate PayFast payments into your app.
 [![Pub Version](https://img.shields.io/pub/v/payfast)](https://pub.dev/packages/payfast)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/youngcet/payfast/blob/main/LICENSE)
 
+<p align="center">
+  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo.gif?raw=true" height="600px">
+  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo_live.gif?raw=true" height="600px">
+</p>
+
 - [Getting Started](#getting-started)
   * [Usage](#usage)
   * [PayFast Onsite Activation Script](#payfast-onsite-activation-script)
@@ -784,6 +789,37 @@ PayFast(
   - `amount`
   - `item_name`
   - `m_payment_id`
+
+  optional:
+  - `item_description` string, 255 char
+    - The description of the item being charged for, or in the case of multiple items the order description.
+  - `fica_idnumber` integer, 13 char
+    - The Fica ID Number provided of the buyer must be a valid South African ID Number.
+  - `cell_number` string, 100 char
+    - The customer’s valid cell number. If the email_address field is empty, and cell_number provided, the system will use the cell_number as the username and auto login the user, if they do not have a registered account
+  - `email_confirmation` boolean, 1 char
+    - Whether to send an email confirmation to the merchant of the transaction. The email confirmation is automatically sent to the payer. 1 = on, 0 = off
+  - `confirmation_address` string, 100 char
+    - The email address to send the confirmation email to. This value can be set globally on your account. Using this field will override the value set in your account for this transaction.
+  - `payment_method` string, 3 char | Not available in Sandbox
+    - When this field is set, only the SINGLE payment method specified can be used when the customer reaches Payfast. If this field is blank, or not included, then all available payment methods will be shown.
+
+      The values are as follows:
+        - ‘ef’ – EFT
+        - ‘cc’ – Credit card
+        - ‘dc’ – Debit card
+        - ’mp’ – Masterpass Scan to Pay
+        - ‘mc’ – Mobicred
+        - ‘sc’ – SCode
+        - ‘ss’ – SnapScan
+        - ‘zp’ – Zapper
+        - ‘mt’ – MoreTyme
+        - ‘rc’ – Store card
+        - ‘mu’ – Mukuru
+        - ‘ap’ – Apple Pay
+        - ‘sp’ – Samsung Pay
+        - ‘cp’ – Capitec Pay
+
 
 ### `onsiteActivationScriptUrl`:  
   The html file URL used for onsite payment activation.
