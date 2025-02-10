@@ -463,6 +463,15 @@ class _PayFastState extends State<PayFast> {
   /// and resource errors.
   void _showWebView() async {
     var response = await _requestPaymentIdentifier();
+    if (response['uuid'] == null){
+      setState(() {
+          _showWebViewWidget = _error(
+            'An error has occured. Please re-check the Payfast details supplied and try again.', 
+            btnText: 'Retry'
+          );
+      });
+    }
+
     paymentIdentifier = response['uuid'];
     
     late final PlatformWebViewControllerCreationParams params;
@@ -576,6 +585,74 @@ class _PayFastState extends State<PayFast> {
           gestureRecognizers: gestureRecognizers,
           controller: _controller);
     });
+  }
+
+  Widget _error(String message, {String? btnText}){
+    return
+      Card(
+        shape:
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(
+                color: Colors.red,
+                width: 1, // Border width
+              ),
+            ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                  size: 100,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Error!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _showWebViewWidget = null;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    backgroundColor: Colors.red,
+                  ),
+                  child: Text(
+                    btnText ?? 'Continue',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
   }
 
   @override

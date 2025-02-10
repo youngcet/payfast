@@ -67,12 +67,15 @@ class PaymentSummary extends StatelessWidget {
   /// This widget returns a `Column` containing a spacer (`SizedBox`) and a `Text` widget.
   /// The text is styled using the `bodySmall` style from the current theme.
   Widget _additionalText(BuildContext context){
+    String description = data['item_description'];
+    description = description.replaceAll(' ', '_');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 5),
         Text(
-          data['additional_text'],
+          description,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.normal,
               ),
@@ -122,7 +125,7 @@ class PaymentSummary extends StatelessWidget {
                             data['item_name'],
                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.normal)
                           ),
-                          if (data['additional_text'] != null) _additionalText(context),
+                          if (data['item_description'] != null) _additionalText(context),
                         ],
                       ),
                     ),

@@ -132,8 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               backgroundColor: Colors.white,
                               builder: (context) => PayFast(
                                 data: {
-                                  'merchant_id': '0000000011111',
-                                  'merchant_key': '223333222233',
+                                  'merchant_id': '00000000000',
+                                  'merchant_key': '0000000000',
                                   'name_first': 'Yung',
                                   'name_last': 'Cet',
                                   'email_address': 'young.cet@gmail.com',
@@ -141,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   'amount': '20',
                                   'item_name': 'Subscription',
                                 },
-                                passPhrase: '0000000000000',
+                                passPhrase: '00000000000',
                                 useSandBox: true, // true to use Payfast sandbox, false to use their live server
                                 // if useSandbox is set to true, use a sandbox link
                                 // you can use the github link below or provide your own link

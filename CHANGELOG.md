@@ -1,14 +1,7 @@
 ## 0.0.6 - 2025-01-31
-- **DEPRECATED** 
-    - **`additional_text`** An optional property that for additional text in `data`    object.
-        - `merchant_id`
-        - `merchant_key`
-        - `name_first`
-        - `name_last`
-        - `amount`
-        - `item_name`
-        - `m_payment_id`
-        - `additional_text` (deprecated)
+- **DEPRECATIONS** 
+    - **`additional_text`** An optional property that for additional text in `data` object (deprecated, use **`item_description`** instead).
+
 - Added
 
   - Payment Flow Customization
