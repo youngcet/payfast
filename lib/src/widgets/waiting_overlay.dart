@@ -34,7 +34,10 @@ class WaitingOverlay extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'Please wait...',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.normal),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.normal),
             ),
           ],
         );

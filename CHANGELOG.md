@@ -1,4 +1,4 @@
-## 0.0.6 - 2025-01-31
+## 0.0.6
 - **DEPRECATIONS** 
     - **`additional_text`** An optional property that for additional text in `data` object (deprecated, use **`item_description`** instead).
 

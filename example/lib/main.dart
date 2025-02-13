@@ -142,11 +142,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   'item_name': 'Subscription',
                                 },
                                 passPhrase: '00000000000',
-                                useSandBox: true, // true to use Payfast sandbox, false to use their live server
+                                useSandBox:
+                                    true, // true to use Payfast sandbox, false to use their live server
                                 // if useSandbox is set to true, use a sandbox link
                                 // you can use the github link below or provide your own link
                                 payButtonStyle: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   backgroundColor: Colors.red,
                                   shadowColor: Colors.transparent,
                                 ),
@@ -166,5 +168,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-

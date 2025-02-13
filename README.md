@@ -9,9 +9,9 @@
     <a href="https://app.codecov.io/gh/youngcet/payfast"><img src="https://img.shields.io/codecov/c/github/youngcet/payfast?logo=codecov&logoColor=white" alt="Coverage Status"></a>
 </p>
 
-# PayFast Flutter Package
+# Payfast Flutter Package
 
-A Flutter package to integrate PayFast payments into your app.
+A Flutter package to integrate Payfast payments into your app.
 
 [![Pub Version](https://img.shields.io/pub/v/payfast)](https://pub.dev/packages/payfast)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/youngcet/payfast/blob/main/LICENSE)
@@ -29,7 +29,7 @@ A Flutter package to integrate PayFast payments into your app.
 
 - [Getting Started](#getting-started)
   * [Usage](#usage)
-  * [PayFast Onsite Activation Script](#payfast-onsite-activation-script)
+  * [Payfast Onsite Activation Script](#payfast-onsite-activation-script)
     * [Hosting on Gihub](#hosting-on-github)
     * [Hosting on a different server](#hosting-on-a-different-server)
   * [Android & IOS Setup](#android-and-ios-setup)
@@ -70,9 +70,9 @@ A Flutter package to integrate PayFast payments into your app.
 
 ## Getting Started
 
-This package uses PayFast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
+This package uses Payfast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
 
-## PayFast Onsite Activation Script
+## Payfast Onsite Activation Script
 
 ### Hosting on Github
 
@@ -83,7 +83,7 @@ Below are GitHub links that you can use if you prefer not to host the file yours
 - https://youngcet.github.io/sandbox_payfast_onsite_payments/ > use to point to the sandbox
 - https://youngcet.github.io/payfast_onsite_payments/ > use to point to the live server
 
-> **Note:** While these links are hosted on GitHub, accessing them through a browser will result in a 404 error from PayFast. This behavior is expected and not an issue.
+> **Note:** While these links are hosted on GitHub, accessing them through a browser will result in a 404 error from Payfast. This behavior is expected and not an issue.
 
 
 ### Hosting on a different server
@@ -146,9 +146,9 @@ Alternatively, you can create your own `html` file but make sure to include the 
 </script>
 ```
 
-To point to a live server, simply change `<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>` tag to `<script src="https://www.payfast.co.za/onsite/engine.js"></script>`. Take note of the url where the `html` file is hosted, you're going pass it along in the PayFast package. 
+To point to a live server, simply change `<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>` tag to `<script src="https://www.payfast.co.za/onsite/engine.js"></script>`. Take note of the url where the `html` file is hosted, you're going pass it along in the Payfast package. 
 
-We have to host the file because for security reasons 'Onsite Payments' requires that your application be served over HTTPS. For more detailed documentation, please refer to the official [PayFast Onsite Payments documentation](https://developers.payfast.co.za/docs#onsite_payments). 
+We have to host the file because for security reasons 'Onsite Payments' requires that your application be served over HTTPS. For more detailed documentation, please refer to the official [Payfast Onsite Payments documentation](https://developers.payfast.co.za/docs#onsite_payments). 
 
 <p align="left">
 <img src="https://github.com/youngcet/payfast/blob/main/doc/sandbox.png?raw=true" alt="Sandbox Screenshot" height="600" width="280" style="border:1px solid grey"/>
@@ -768,7 +768,7 @@ PayFast(
 ## Properties
 
 ### `passPhrase`:  
-  The passphrase provided by PayFast for security.
+  The passphrase provided by Payfast for security.
 
 ### `useSandBox`:  
   A boolean flag to choose between sandbox or live environment.
@@ -895,7 +895,7 @@ An optional text displayed at the top of the payment completed screen.
 
 ## Conclusion
 
-This package allows you to easily integrate PayFast into your Flutter project and FlutterFlow. The integration can be fully customized to match your app's payment requirements. For production, ensure that you replace the sandbox configuration with live credentials and URLs.
+This package allows you to easily integrate Payfast into your Flutter project and FlutterFlow. The integration can be fully customized to match your app's payment requirements. For production, ensure that you replace the sandbox configuration with live credentials and URLs.
 
 
 ## Contributing

@@ -29,7 +29,7 @@ class SummaryWidget extends StatefulWidget {
       required this.paymentSummaryWidget,
       required this.onPayButtonPressed,
       this.payButtonStyle,
-      this.payButtonText, 
+      this.payButtonText,
       this.payButtonLeadingWidget});
 
   @override
@@ -52,50 +52,50 @@ class _SummaryPageState extends State<SummaryWidget> {
   /// A function that returns a widget that is displayed next to the "Pay Now" button.
   ///
   /// You can customize this to match your application’s context or language.
-  Widget _icon(){
+  Widget _icon() {
     return widget.payButtonLeadingWidget ?? Container();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          widget.paymentSummaryWidget,
-          const Spacer(), // This pushes the button to the bottom of the screen
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: _isButtonPressed ? null : _processPayment,
-              style: widget.payButtonStyle ??
-                  ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.blueAccent,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget.paymentSummaryWidget,
+            const Spacer(), // This pushes the button to the bottom of the screen
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _isButtonPressed ? null : _processPayment,
+                style: widget.payButtonStyle ??
+                    ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.blueAccent,
+                    ),
+                icon: _isButtonPressed
+                    ? Container(
+                        width: 24,
+                        height: 24,
+                        padding: const EdgeInsets.all(2.0),
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : _icon(),
+                label: Text(
+                  widget.payButtonText ?? 'Pay Now',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-              icon: _isButtonPressed
-                  ? Container(
-                      width: 24,
-                      height: 24,
-                      padding: const EdgeInsets.all(2.0),
-                      child: const CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 3,
-                      ),
-                    )
-                  : _icon(),
-              label: Text(
-                widget.payButtonText ?? 'Pay Now',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
                 ),
               ),
             ),
-          ),
-        ],
-      ));
+          ],
+        ));
   }
 }
