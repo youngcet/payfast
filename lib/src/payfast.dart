@@ -89,13 +89,13 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 ///
 /// - **[backgroundColor]** *(Icon?)*: The default background color in the
 ///   payment summary section. Can be customized to match the app's theme.
-/// 
+///
 /// - **[paymentCancelledButtonText]** *(String?)*: The text displayed on the button (default text is continue).
 ///
 /// - **[paymentCancelledTitle]** *(String?)*: The text displayed at the top of the screen.
 ///
 /// - **[paymentCompletedButtonText]** *(String?)*: The text displayed on the button (default text is continue).
-/// 
+///
 /// - **[paymentCompletedTitle]** *(String?)*: The text displayed at the top of the screen.
 ///
 /// ### Example Usage
@@ -303,12 +303,12 @@ class PayFast extends StatefulWidget {
     this.backgroundColor,
     this.animatedSwitcherWidget,
     this.onPaymentCompletedShapeBorder,
-    this.onPaymentCancelledShapeBorder, 
-    this.itemSummarySectionLeadingWidget, 
-    this.payButtonLeadingWidget, 
-    this.paymentSummaryAmountColor, 
-    this.paymentCompletedButtonText, 
-    this.paymentCompletedTitle, 
+    this.onPaymentCancelledShapeBorder,
+    this.itemSummarySectionLeadingWidget,
+    this.payButtonLeadingWidget,
+    this.paymentSummaryAmountColor,
+    this.paymentCompletedButtonText,
+    this.paymentCompletedTitle,
     this.paymentCancelledTitle,
   })  : assert(data.containsKey('merchant_id'),
             'Missing required key: merchant_id'),
@@ -398,7 +398,7 @@ class _PayFastState extends State<PayFast> {
     String paramString = _dataToString(data);
 
     var response = await http.post(Uri.parse('$endpointUrl?$paramString'));
-    
+
     if (response.statusCode == 200) {
       jsonResponse = jsonDecode(response.body);
     } else {
@@ -463,8 +463,16 @@ class _PayFastState extends State<PayFast> {
   /// and resource errors.
   void _showWebView() async {
     var response = await _requestPaymentIdentifier();
+    if (response['uuid'] == null) {
+      setState(() {
+        _showWebViewWidget = _error(
+            'An error has occured. Please re-check the Payfast details supplied and try again.',
+            btnText: 'Retry');
+      });
+    }
+
     paymentIdentifier = response['uuid'];
-    
+
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -495,12 +503,8 @@ class _PayFastState extends State<PayFast> {
               });
             }
           },
-          onPageStarted: (String url) {
-            
-          },
-          onPageFinished: (String url) {
-            
-          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {
             debugPrint('''
             Page resource error:
@@ -578,6 +582,72 @@ class _PayFastState extends State<PayFast> {
     });
   }
 
+  Widget _error(String message, {String? btnText}) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(
+          color: Colors.red,
+          width: 1, // Border width
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 100,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Error!',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _showWebViewWidget = null;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  backgroundColor: Colors.red,
+                ),
+                child: Text(
+                  btnText ?? 'Continue',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -631,8 +701,10 @@ class _PayFastState extends State<PayFast> {
                           data: widget.data,
                           title: widget.paymentSummaryTitle,
                           icon: widget.defaultPaymentSummaryIcon,
-                          itemSectionLeadingWidget: widget.itemSummarySectionLeadingWidget,
-                          paymentSummaryAmountColor: widget.paymentSummaryAmountColor,
+                          itemSectionLeadingWidget:
+                              widget.itemSummarySectionLeadingWidget,
+                          paymentSummaryAmountColor:
+                              widget.paymentSummaryAmountColor,
                           child: widget.paymentSumarryWidget,
                         ),
                         onPayButtonPressed: _showWebView,

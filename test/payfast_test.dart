@@ -134,7 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             passPhrase: 'xxxxxxxxxxxxxx',
             useSandBox: true,
-            onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
+            onsiteActivationScriptUrl:
+                'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
             onPaymentCancelled: () => closeModal(),
             onPaymentCompleted: () => closeModal(),
           ),
