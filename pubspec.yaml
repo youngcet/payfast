@@ -11,7 +11,7 @@ dependencies:
   crypto: ^3.0.3
   flutter:
     sdk: flutter
-  http: ^0.13.6
+  http: ^1.4.0
   webview_flutter: ^4.4.2
   webview_flutter_android: ^3.12.1
   webview_flutter_wkwebview: ^3.9.4
