@@ -146,6 +146,28 @@ Alternatively, you can create your own `html` file but make sure to include the 
 </script>
 ```
 
+You can also add your URLs like this instead of a callback:
+```html
+...
+<script>
+    // DO NOT MODIFY THE CODE BELOW
+    
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const uuid = urlParams.get('uuid');
+
+    window.payfast_do_onsite_payment({
+      'uuid':uuid,
+      'return_url': 'completed', // DO NOT CHANGE
+      'cancel_url': 'closed', // DO NOT CHANGE
+       'notify_url': 'insert-your-webhook-url'  // optional: A payment confirmation notification will be sent to the "notify_url" you specified.
+    });
+</script> 
+```
+
+### Payment Confirmation
+Payfast will send a payment confirmation notification to the "notify_url" you specified. The full implementation details can be found [here](https://developers.payfast.co.za/docs#step_4_confirm_payment).
+
 To point to a live server, simply change `<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>` tag to `<script src="https://www.payfast.co.za/onsite/engine.js"></script>`. Take note of the url where the `html` file is hosted, you're going pass it along in the Payfast package. 
 
 We have to host the file because for security reasons 'Onsite Payments' requires that your application be served over HTTPS. For more detailed documentation, please refer to the official [Payfast Onsite Payments documentation](https://developers.payfast.co.za/docs#onsite_payments). 
@@ -598,7 +620,7 @@ To integrate with FluterFlow,
 <img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_widget_settings.png?raw=true" alt="FlutterFlow Settings" width="280"/>
 
 
-4. Add **PayFast: ^latest_version** to the dependencies and refresh the UI (replace latest_version with the latest version).
+4. Add **payfast: ^latest_version** to the dependencies and refresh the UI (replace latest_version with the latest version).
 
 <img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_dependency.png?raw=true" alt="FlutterFlow Dependency" width="280"/>
 
