@@ -14,6 +14,7 @@ import 'package:payfast/src/widgets/payment_summary.dart';
 import 'package:payfast/src/widgets/summary_widget.dart';
 import 'package:payfast/src/widgets/waiting_overlay.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 // #docregion platform_imports
 // Import for Android features.
@@ -281,6 +282,12 @@ class PayFast extends StatefulWidget {
   /// The text displayed at the top of the screen.
   final String? paymentCancelledTitle;
 
+  /// A route to navigate to when a payment is completed
+  final String? paymentCompletedRoute;
+
+  /// A route to navigate to when a payment is cancelled
+  final String? paymentCancelledRoute;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -310,6 +317,8 @@ class PayFast extends StatefulWidget {
     this.paymentCompletedButtonText,
     this.paymentCompletedTitle,
     this.paymentCancelledTitle,
+    this.paymentCancelledRoute,
+    this.paymentCompletedRoute
   })  : assert(data.containsKey('merchant_id'),
             'Missing required key: merchant_id'),
         assert(data.containsKey('merchant_key'),
@@ -349,6 +358,19 @@ class _PayFastState extends State<PayFast> {
   @override
   void initState() {
     super.initState();
+
+    if (kIsWeb) {
+      setState(() {
+        _showWebViewWidget = _error(
+            'This package does not support web. Test using a device emulator or a real device. For web, use payfast_web package.',
+            btnText: 'Ok', 
+            onTap: (){
+              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+            }
+        );
+      });
+      return;
+    }
 
     _validate();
   }
@@ -466,9 +488,11 @@ class _PayFastState extends State<PayFast> {
     if (response['uuid'] == null) {
       setState(() {
         _showWebViewWidget = _error(
-            'An error has occured. Please re-check the Payfast details supplied and try again.',
+            'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.',
             btnText: 'Retry');
       });
+
+      return;
     }
 
     paymentIdentifier = response['uuid'];
@@ -527,9 +551,7 @@ class _PayFastState extends State<PayFast> {
                 );
               });
               return NavigationDecision.prevent;
-            }
-
-            if (request.url.contains(Constants.closed)) {
+            }else if (request.url.contains(Constants.closed)) {
               setState(() {
                 _showWebViewWidget = PaymentCancelled(
                   onPaymentCancelled: widget.onPaymentCancelled,
@@ -541,9 +563,20 @@ class _PayFastState extends State<PayFast> {
                 );
               });
               return NavigationDecision.prevent;
+            }else{
+              setState(() {
+                _showWebViewWidget = _error(
+                    "Failed to get transaction status from the activation script. Ensure the script is configured properly.",
+                    btnText: 'Ok', 
+                    onTap: (){
+                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                    }
+                );
+              });
+              return NavigationDecision.prevent;
             }
 
-            return NavigationDecision.navigate;
+            //return NavigationDecision.navigate;
           },
           onUrlChange: (UrlChange change) {
             if (change.url != null) {}
@@ -582,7 +615,11 @@ class _PayFastState extends State<PayFast> {
     });
   }
 
-  Widget _error(String message, {String? btnText}) {
+  /// Builds an error card widget with an error icon, message, and a button.
+  /// 
+  /// [message] - The error message to display.
+  /// [btnText] - Optional custom text for the button. Defaults to 'Continue'.
+  Widget _error(String message, {String? btnText, VoidCallback? onTap}) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -627,6 +664,10 @@ class _PayFastState extends State<PayFast> {
                   setState(() {
                     _showWebViewWidget = null;
                   });
+
+                  if (onTap != null) {
+                    onTap();
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   padding:
