@@ -1,6 +1,6 @@
 name: payfast
 description: A Flutter package to integrate Payfast payments into your app.
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/youngcet/payfast
 
 environment:
@@ -14,8 +14,8 @@ dependencies:
   http: ^0.13.6
   webview_flutter: ^4.4.2
   webview_flutter_android: ^3.12.1
-  webview_flutter_wkwebview: ^3.9.4
   flutter_html: ^3.0.0-alpha.3
+  webview_flutter_platform_interface: ^2.6.0
 
 dev_dependencies:
   flutter_test:

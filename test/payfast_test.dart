@@ -9,7 +9,7 @@ import 'package:payfast/payfast.dart';
 void main() {
   group('MyApp widget test', () {
     testWidgets('MyApp widget builds correctly', (WidgetTester tester) async {
-      await tester.runAsync(() => tester.pumpWidget(MyApp()));
+      await tester.runAsync(() => tester.pumpWidget(const MyApp()));
       expect(find.byType(MyApp), findsOneWidget);
     });
 
@@ -88,8 +88,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   @override
   void initState() {
     super.initState();

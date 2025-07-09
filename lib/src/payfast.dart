@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -14,15 +13,11 @@ import 'package:payfast/src/widgets/on_payment_completed.dart';
 import 'package:payfast/src/widgets/payment_summary.dart';
 import 'package:payfast/src/widgets/summary_widget.dart';
 import 'package:payfast/src/widgets/waiting_overlay.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 // #docregion platform_imports
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
-// Import for iOS features.
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 /// The `PayFast` class is a stateful widget designed to integrate
 /// PayFast's payment processing system into a Flutter application.
@@ -47,7 +42,7 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 /// - **[useSandBox]** *(bool)*: Indicates whether to use the PayFast sandbox
 ///   environment for testing. Defaults to `false` for the live environment.
 ///
-/// - **[data]** *(Map<String, dynamic>)*: A map containing payment-related data
+/// - **[data]** *(Map)*: A map containing payment-related data
 ///   such as `merchant_id`, `amount`, and `item_name`. The map must include
 ///   required fields for successful processing.
 ///
@@ -351,9 +346,6 @@ class _PayFastState extends State<PayFast> {
   /// A dynamic widget that holds the WebView or any other widget to be displayed.
   Widget? _showWebViewWidget;
 
-  /// Unique key used for identifying and managing the widget's state in the widget tree.
-  final UniqueKey _key = UniqueKey();
-
   /// A boolean flag to show or hide the loading spinner during payment processing.
   bool _showSpinner = false;
 
@@ -387,10 +379,10 @@ class _PayFastState extends State<PayFast> {
   /// the URL is invalid. This ensures that the PayFast integration functions correctly and
   /// securely.
   void _validate() {
-    bool _validURL =
+    bool validURL =
         Uri.tryParse(widget.onsiteActivationScriptUrl)?.hasAbsolutePath ??
             false;
-    if (!_validURL || !widget.onsiteActivationScriptUrl.startsWith('https')) {
+    if (!validURL || !widget.onsiteActivationScriptUrl.startsWith('https')) {
       throw Exception('onsiteActivationScriptUrl URL not valid');
     }
   }
@@ -528,7 +520,7 @@ class _PayFastState extends State<PayFast> {
               description: ${error.description}
               errorType: ${error.errorType}
               isForMainFrame: ${error.isForMainFrame}
-                      ''');
+            ''');
           })
           ..setOnNavigationRequest ((NavigationRequest request) async {
             if (request.url.contains(Constants.completed)) {
@@ -667,7 +659,7 @@ class _PayFastState extends State<PayFast> {
                 ),
                 child: Text(
                   btnText ?? 'Continue',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
                   ),
