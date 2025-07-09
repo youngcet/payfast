@@ -25,7 +25,7 @@ class PaymentCompleted extends StatelessWidget {
   final String? onPaymentCompletedText;
 
   /// A callback function executed when the "Continue" button is pressed.
-  final Function onPaymentCompleted;
+  final Function(Map<String, dynamic>) onPaymentCompleted;
 
   /// An optional custom widget to replace the default layout.
   final Widget? child;
@@ -94,7 +94,7 @@ class PaymentCompleted extends StatelessWidget {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
-                      onPaymentCompleted();
+                      onPaymentCompleted({});
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(

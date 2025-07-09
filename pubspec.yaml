@@ -1,6 +1,6 @@
 name: payfast
 description: A Flutter package to integrate Payfast payments into your app.
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/youngcet/payfast
 
 environment:

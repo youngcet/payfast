@@ -1,3 +1,36 @@
+## 0.0.7
+- Added
+    - You can now retrieve the **transaction data** in the `onPaymentCompleted` callback.
+
+    ### Example
+
+    ```dart
+    PayFast(
+        ...
+        onPaymentCompleted: (data) {
+            // payment completed
+            // data holds the transaction details including the payment uuid
+        },
+    ) 
+    ```
+
+    Or
+    ```dart
+    void paymentCompleted(Map<String, dynamic> data) {
+        // payment completed
+        print(data);
+    }
+
+    PayFast(
+        ...
+        onPaymentCompleted: paymentCompleted,
+    ) 
+    ```
+
+### Improved
+- Enhanced error handling for improved stability and clearer error messages.
+
+
 ## 0.0.6
 - **DEPRECATIONS** 
     - **`additional_text`** An optional property that for additional text in `data` object (deprecated, use **`item_description`** instead).
