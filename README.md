@@ -795,7 +795,11 @@ PayFast(
 
 ## Errors
 - Unable to generate a payment reference
-  - Possible causes include invalid merchant details or downtime on PayFast's servers.
+  - Possible causes include invalid merchant details or downtime on Payfast's servers.
+- Failed to get transaction status from the activation script
+  - Caused by incorrect callbacks on the activation script.
+- This package does not support web
+  - As the error message suggests, the package does not support web.
 
 
 ## Properties
