@@ -65,7 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return '$randomNumber';
   }
 
-  void paymentCompleted() {
+  void paymentCompleted(Map<String, dynamic> data) {
+    print(data);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
           content: Text('Payment Successful!'),
@@ -132,8 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           backgroundColor: Colors.white,
                           builder: (context) => PayFast(
                             data: {
-                              'merchant_id': 'xxxxxxxxxxxxxx',
-                              'merchant_key': 'xxxxxxxxxxxxx',
+                              'merchant_id': 'xxxxxxxxxxx',
+                              'merchant_key': 'xxxxxx',
                               'name_first': 'Yung',
                               'name_last': 'Cet',
                               'email_address': 'young.cet@gmail.com',
@@ -141,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               'amount': '20',
                               'item_name': 'Subscription',
                             },
-                            passPhrase: 'xxxxxxxxxxxxxxxxx',
+                            passPhrase: 'xxxxxxx',
                             useSandBox: true,
                             payButtonStyle: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -150,8 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             onsiteActivationScriptUrl:
                                 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
-                            onPaymentCancelled: () => paymentCancelled(),
-                            onPaymentCompleted: () => paymentCompleted(),
+                            onPaymentCancelled: paymentCancelled,
+                            onPaymentCompleted: paymentCompleted,
                           ),
                         ),
                       ),

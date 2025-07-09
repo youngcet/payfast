@@ -11,7 +11,7 @@
 
 # Payfast Flutter Package
 
-A Flutter package to integrate Payfast payments into your app.
+A Flutter package to integrate Payfast payments into your app. **THIS PACKAGE DOES NOT SUPPORT WEB, FOR WEB USE [THIS PACKAGE](https://github.com/youngcet/payfast_web)**. 
 
 [![Pub Version](https://img.shields.io/pub/v/payfast)](https://pub.dev/packages/payfast)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/youngcet/payfast/blob/main/LICENSE)
@@ -263,7 +263,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void paymentCompleted(){
+  void paymentCompleted(Map<String, dynamic> data){
+    // data holds the transaction details
+    //print(data); // -> {merchant_id: xxxxxx, merchant_key: xxxxxxxxxxx, name_first: Yung, name_last: Cet, email_address: young.cet@gmail.com, m_payment_id: 915669, amount: 20, item_name: Subscription, payment_uuid: xxx-xxxx-xxxx-xxx, timestamp: 2025-07-09T14:03:58.722463}
+
     print('payment completed');
   }
 
@@ -293,8 +296,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // if useSandbox is set to true, use a sandbox link
             // you can use the github link below or provide your own link
             onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/', // url to the html file
-            onPaymentCancelled: () => paymentCompleted(), // callback function for successful payment
-            onPaymentCompleted: () => paymentCancelled(), // callback function for cancelled payment
+            onPaymentCancelled: paymentCompleted, // callback function for successful payment
+            onPaymentCompleted: paymentCancelled, // callback function for cancelled payment
         ),)
       ),
     );
@@ -335,8 +338,9 @@ PayFast(
     onPaymentCancelled: () {
         // payment cancelled
     },
-    onPaymentCompleted: () {
+    onPaymentCompleted: (data) {
         // payment completed
+        // data holds the transaction details including the payment uuid
     },
 ) 
 ```
@@ -682,7 +686,10 @@ class _PayFastWidgetState extends State<PayFastWidget> {
         useSandBox: widget.useSandBox,
         onsiteActivationScriptUrl: widget.onsiteActivationScriptUrl,
         onPaymentCancelled: () => widget.onPaymentCancelled(), 
-        onPaymentCompleted: () => widget.onPaymentCompleted(),
+        onPaymentCompleted: (data) {
+          // data holds the transaction details
+          widget.onPaymentCompleted();
+        }
         paymentSumarryWidget: _paymentSummary(), // pass widget
         // add other parameters as needed
       ))),
@@ -929,7 +936,7 @@ If you have ideas or improvements for this package, we welcome contributions. Pl
 
 Looking for support, updates, or a place to discuss the **PayFast Flutter Package**? Join our dedicated Discord channel!
 
-👉 [Join the `#payfast-flutter-package` channel](https://discord.gg/Gh9J5sns)
+👉 [Join the `#payfast-flutter-package` channel](https://discord.gg/n35vTTHY)
 
 ### What You'll Find:
 - **Help & Support**: Get assistance with integrating and using the package.

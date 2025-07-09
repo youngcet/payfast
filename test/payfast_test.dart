@@ -137,7 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
             onsiteActivationScriptUrl:
                 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
             onPaymentCancelled: () => closeModal(),
-            onPaymentCompleted: () => closeModal(),
+            onPaymentCompleted: (data){
+              // payment completed
+              closeModal();
+            },
           ),
         ),
       ),

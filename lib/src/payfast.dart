@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -15,6 +16,7 @@ import 'package:payfast/src/widgets/summary_widget.dart';
 import 'package:payfast/src/widgets/waiting_overlay.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 // #docregion platform_imports
 // Import for Android features.
@@ -61,7 +63,7 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 /// - **[paymentSumarryWidget]** *(Widget?)*: A customizable widget for displaying
 ///   the payment summary, such as item details and amounts.
 ///
-/// - **[onPaymentCompleted]** *(Function)*: A callback function triggered when
+/// - **[onPaymentCompleted]** *(Function(Map<String, dynamic>))*: A callback function triggered when
 ///   the payment is successfully completed.
 ///
 /// - **[onPaymentCancelled]** *(Function)*: A callback function triggered when
@@ -113,7 +115,7 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 ///     // other required data...
 ///   },
 ///   onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
-///   onPaymentCompleted: () {
+///   onPaymentCompleted: (data) {
 ///     print('Payment completed successfully.');
 ///   },
 ///   onPaymentCancelled: () {
@@ -187,7 +189,7 @@ class PayFast extends StatefulWidget {
   ///
   /// This function is executed after the user completes the payment on
   /// PayFast and the system confirms the transaction.
-  final Function onPaymentCompleted;
+  final Function(Map<String, dynamic>) onPaymentCompleted;
 
   /// A callback function invoked when the payment process is cancelled.
   ///
@@ -341,7 +343,7 @@ class PayFast extends StatefulWidget {
 
 class _PayFastState extends State<PayFast> {
   /// WebView controller used to control and interact with the WebView instance.
-  late final WebViewController _controller;
+  late final PlatformWebViewController _controller;
 
   /// Payment identifier (UUID) that uniquely identifies each payment transaction.
   var paymentIdentifier = '';
@@ -497,26 +499,16 @@ class _PayFastState extends State<PayFast> {
 
     paymentIdentifier = response['uuid'];
 
-    late final PlatformWebViewControllerCreationParams params;
-    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
-      params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-      );
-    } else {
-      params = const PlatformWebViewControllerCreationParams();
-    }
-
-    final WebViewController controller =
-        WebViewController.fromPlatformCreationParams(params);
-    // #enddocregion platform_features
-
-    controller
+    _controller = PlatformWebViewController(
+      AndroidWebViewControllerCreationParams(),
+    )
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
+      ..setPlatformNavigationDelegate(
+        PlatformNavigationDelegate(
+          const PlatformNavigationDelegateCreationParams(),
+        )
+          ..setOnProgress ((int progress) {
             if (progress < 100) {
               setState(() {
                 _showSpinner = true;
@@ -526,10 +518,10 @@ class _PayFastState extends State<PayFast> {
                 _showSpinner = false;
               });
             }
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onWebResourceError: (WebResourceError error) {
+          })
+          ..setOnPageStarted ((String url) {})
+          ..setOnPageFinished((String url) {})
+          ..setOnWebResourceError ((WebResourceError error) {
             debugPrint('''
             Page resource error:
               code: ${error.errorCode}
@@ -537,12 +529,16 @@ class _PayFastState extends State<PayFast> {
               errorType: ${error.errorType}
               isForMainFrame: ${error.isForMainFrame}
                       ''');
-          },
-          onNavigationRequest: (NavigationRequest request) async {
+          })
+          ..setOnNavigationRequest ((NavigationRequest request) async {
             if (request.url.contains(Constants.completed)) {
+              var transactionData = widget.data;
+              transactionData['payment_uuid'] = paymentIdentifier;
+              transactionData['timestamp'] = DateTime.now().toIso8601String();
+
               setState(() {
                 _showWebViewWidget = PaymentCompleted(
-                  onPaymentCompleted: widget.onPaymentCompleted,
+                  onPaymentCompleted: (_) => widget.onPaymentCompleted(transactionData),
                   onPaymentCompletedText: widget.onPaymentCompletedText,
                   shape: widget.onPaymentCompletedShapeBorder,
                   paymentCompletedButtonText: widget.paymentCompletedButtonText,
@@ -577,41 +573,36 @@ class _PayFastState extends State<PayFast> {
             }
 
             //return NavigationDecision.navigate;
-          },
-          onUrlChange: (UrlChange change) {
+          })
+          ..setOnUrlChange ((UrlChange change) {
             if (change.url != null) {}
-          },
-        ),
+          }),
       )
-      ..addJavaScriptChannel(
-        'Toaster',
+      ..addJavaScriptChannel(JavaScriptChannelParams(
+        name: 'Toaster',
         onMessageReceived: (JavaScriptMessage message) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(message.message),
-                behavior: SnackBarBehavior.floating),
+            SnackBar(content: Text(message.message)),
           );
         },
-      )
-      ..loadRequest(Uri.parse(
-          '${widget.onsiteActivationScriptUrl}?uuid=$paymentIdentifier'));
+      ))
+      ..loadRequest(LoadRequestParams (
+          uri : Uri.parse('${widget.onsiteActivationScriptUrl}?uuid=$paymentIdentifier')
+      ));
 
     // #docregion platform_features
-    if (controller.platform is AndroidWebViewController) {
-      AndroidWebViewController.enableDebugging(true);
-      (controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
-    }
+    // if (controller.platform is AndroidWebViewController) {
+    //   AndroidWebViewController.enableDebugging(true);
+    //   (controller.platform as AndroidWebViewController)
+    //       .setMediaPlaybackRequiresUserGesture(false);
+    // }
 
     // #enddocregion platform_features
     setState(() {
-      _controller = controller;
       //_loadHTMLString(paymentIdentifier);
-      _showWebViewWidget = WebViewWidget(
-          layoutDirection: Directionality.maybeOf(context) ?? TextDirection.ltr,
-          key: _key,
-          gestureRecognizers: gestureRecognizers,
-          controller: _controller);
+      _showWebViewWidget = PlatformWebViewWidget(
+        PlatformWebViewWidgetCreationParams(controller: _controller),
+      ).build(context);
     });
   }
 
