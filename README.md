@@ -42,6 +42,7 @@ A Flutter package to integrate Payfast payments into your app. **THIS PACKAGE DO
   * [Customizable Waiting Overlay Widget](#customizable-waiting-overlay-widget)
   * [FlutterFlow Integration](#flutterflow-integration)
   * [Customizable Animation](#customizable-animation)
+- [Errors](#errors)
 - [Properties](#properties)
   * [passPhrase](#passphrase)
   * [useSandBox](#usesandbox)
@@ -792,6 +793,9 @@ PayFast(
 )
 ```
 
+## Errors
+- Unable to generate a payment reference
+  - Possible causes include invalid merchant details or downtime on PayFast's servers.
 
 
 ## Properties

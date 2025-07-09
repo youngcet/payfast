@@ -1,4 +1,4 @@
-## 0.0.7
+## 0.0.8
 - Added
     - You can now retrieve the **transaction data** in the `onPaymentCompleted` callback.
 
