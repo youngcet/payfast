@@ -7,7 +7,6 @@ import 'package:payfast/src/animation/my_animated_switcher.dart';
 import 'package:payfast/src/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:payfast/src/widgets/on_payment_cancelled.dart';
 import 'package:payfast/src/widgets/on_payment_completed.dart';
 import 'package:payfast/src/widgets/payment_summary.dart';
@@ -285,6 +284,11 @@ class PayFast extends StatefulWidget {
   /// A route to navigate to when a payment is cancelled
   final String? paymentCancelledRoute;
 
+  /// A callback function invoked when a Payfast error is encountered.
+  ///
+  /// This function is executed after an error has occured from Payfast
+  final Function(String)? onError;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -315,7 +319,8 @@ class PayFast extends StatefulWidget {
     this.paymentCompletedTitle,
     this.paymentCancelledTitle,
     this.paymentCancelledRoute,
-    this.paymentCompletedRoute
+    this.paymentCompletedRoute,
+    this.onError,
   })  : assert(data.containsKey('merchant_id'),
             'Missing required key: merchant_id'),
         assert(data.containsKey('merchant_key'),
@@ -348,6 +353,9 @@ class _PayFastState extends State<PayFast> {
 
   /// A boolean flag to show or hide the loading spinner during payment processing.
   bool _showSpinner = false;
+
+  // an error message string
+  String? _errorMsg;
 
   @override
   void initState() {
@@ -414,12 +422,20 @@ class _PayFastState extends State<PayFast> {
     String paramString = _dataToString(data);
 
     var response = await http.post(Uri.parse('$endpointUrl?$paramString'));
-
     if (response.statusCode == 200) {
       jsonResponse = jsonDecode(response.body);
     } else {
+      final regex = RegExp(r'<span\s+class="err-msg"\s*>(.*?)<\/span>');
+      final match = regex.firstMatch(response.body);
+      String? extracted = match?.group(1);
+
+      if (extracted != null){
+        extracted = extracted.replaceAll(RegExp(r'<[^>]*>'), '');
+      }
+
       setState(() {
-        _showWebViewWidget = Html(data: response.body);
+        _errorMsg = extracted;
+        //_showWebViewWidget = Html(data: response.body);
       });
     }
 
@@ -479,6 +495,21 @@ class _PayFastState extends State<PayFast> {
   /// and resource errors.
   void _showWebView() async {
     var response = await _requestPaymentIdentifier();
+    if (_errorMsg != null){
+      if (widget.onError != null){
+        widget.onError!(_errorMsg!);
+        return;
+      }
+
+      setState(() {
+        _showWebViewWidget = _error(
+            _errorMsg!,
+            btnText: 'Retry');
+      });
+
+      return;
+    }
+
     if (response['uuid'] == null) {
       setState(() {
         _showWebViewWidget = _error(
