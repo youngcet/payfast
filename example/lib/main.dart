@@ -133,16 +133,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           backgroundColor: Colors.white,
                           builder: (context) => PayFast(
                             data: {
-                              'merchant_id': '000000000',
-                              'merchant_key': 'xxxxxxxxx',
+                              'merchant_id': '10040320',
+                              'merchant_key': 'm5o5g2lbx4qng',
                               'name_first': 'Yung',
                               'name_last': 'Cet',
-                              'email_address': 'young.cet@gmail.com',
+                              'email_address': 'yungcet@permanentlink.co.za',
                               'm_payment_id': _randomId(),
                               'amount': '20',
                               'item_name': 'Subscription',
                             },
-                            passPhrase: 'xxxxxxxxxx',
+                            passPhrase: 'xxxxxxxxxxxx',
                             useSandBox: true,
                             payButtonStyle: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
