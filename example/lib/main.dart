@@ -133,8 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           backgroundColor: Colors.white,
                           builder: (context) => PayFast(
                             data: {
-                              'merchant_id': '10040320',
-                              'merchant_key': 'm5o5g2lbx4qng',
+                              'merchant_id': '000000',
+                              'merchant_key': 'xxxxxxxxxx',
                               'name_first': 'Yung',
                               'name_last': 'Cet',
                               'email_address': 'yungcet@permanentlink.co.za',
