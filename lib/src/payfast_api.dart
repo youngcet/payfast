@@ -17,11 +17,12 @@ class PayFastApi {
   /// use sandbox/live
   final bool useSandBox;
 
-  PayFastApi(
-      {required this.merchantId,
-      required this.merchantKey,
-      required this.useSandBox,
-      required this.passPhrase});
+  PayFastApi({
+    required this.merchantId,
+    required this.merchantKey,
+    required this.useSandBox,
+    required this.passPhrase,
+  });
 
   /// get endpoint url
   String get endpointUrl =>

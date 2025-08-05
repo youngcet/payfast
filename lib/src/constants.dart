@@ -28,12 +28,12 @@ class Constants {
 
   static const List<String> transactionCompletedStatus = [
     '{transaction.completed}',
-    'completed'
+    'completed',
   ];
   static const List<String> transactionCancelledStatus = [
     '{transaction.cancelled}',
     '{transaction.closed}',
-    'closed'
+    'closed',
   ];
 
   static const String additionalText = 'additional_text';

@@ -17,11 +17,12 @@ class PayFastUtils {
   /// use sandbox/live
   final bool useSandBox;
 
-  PayFastUtils(
-      {required this.merchantId,
-      required this.merchantKey,
-      required this.useSandBox,
-      required this.passPhrase});
+  PayFastUtils({
+    required this.merchantId,
+    required this.merchantKey,
+    required this.useSandBox,
+    required this.passPhrase,
+  });
 
   /// get endpoint url
   String get endpointUrl =>
