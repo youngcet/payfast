@@ -7,7 +7,6 @@ import 'package:payfast/src/animation/my_animated_switcher.dart';
 import 'package:payfast/src/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:payfast/src/widgets/on_payment_cancelled.dart';
 import 'package:payfast/src/widgets/on_payment_completed.dart';
 import 'package:payfast/src/widgets/payment_summary.dart';
@@ -285,6 +284,11 @@ class PayFast extends StatefulWidget {
   /// A route to navigate to when a payment is cancelled
   final String? paymentCancelledRoute;
 
+  /// A callback function invoked when a Payfast error is encountered.
+  ///
+  /// This function is executed after an error has occured from Payfast
+  final Function(String)? onError;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -315,22 +319,31 @@ class PayFast extends StatefulWidget {
     this.paymentCompletedTitle,
     this.paymentCancelledTitle,
     this.paymentCancelledRoute,
-    this.paymentCompletedRoute
-  })  : assert(data.containsKey('merchant_id'),
-            'Missing required key: merchant_id'),
-        assert(data.containsKey('merchant_key'),
-            'Missing required key: merchant_key'),
-        assert(
-            data.containsKey('name_first'), 'Missing required key: name_first'),
-        assert(
-            data.containsKey('name_last'), 'Missing required key: name_last'),
-        assert(data.containsKey('email_address'),
-            'Missing required key: email_address'),
-        assert(data.containsKey('m_payment_id'),
-            'Missing required key: m_payment_id'),
-        assert(data.containsKey('amount'), 'Missing required key: amount'),
-        assert(
-            data.containsKey('item_name'), 'Missing required key: item_name');
+    this.paymentCompletedRoute,
+    this.onError,
+  }) : assert(
+         data.containsKey('merchant_id'),
+         'Missing required key: merchant_id',
+       ),
+       assert(
+         data.containsKey('merchant_key'),
+         'Missing required key: merchant_key',
+       ),
+       assert(
+         data.containsKey('name_first'),
+         'Missing required key: name_first',
+       ),
+       assert(data.containsKey('name_last'), 'Missing required key: name_last'),
+       assert(
+         data.containsKey('email_address'),
+         'Missing required key: email_address',
+       ),
+       assert(
+         data.containsKey('m_payment_id'),
+         'Missing required key: m_payment_id',
+       ),
+       assert(data.containsKey('amount'), 'Missing required key: amount'),
+       assert(data.containsKey('item_name'), 'Missing required key: item_name');
 
   @override
   State<PayFast> createState() => _PayFastState();
@@ -349,6 +362,9 @@ class _PayFastState extends State<PayFast> {
   /// A boolean flag to show or hide the loading spinner during payment processing.
   bool _showSpinner = false;
 
+  // an error message string
+  String? _errorMsg;
+
   @override
   void initState() {
     super.initState();
@@ -356,11 +372,13 @@ class _PayFastState extends State<PayFast> {
     if (kIsWeb) {
       setState(() {
         _showWebViewWidget = _error(
-            'This package does not support web. Test using a device emulator or a real device. For web, use payfast_web package.',
-            btnText: 'Ok', 
-            onTap: (){
-              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-            }
+          'This package does not support web. Test using a device emulator or a real device. For web, use payfast_web package.',
+          btnText: 'Ok',
+          onTap: () {
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil('/', (route) => false);
+          },
         );
       });
       return;
@@ -381,7 +399,7 @@ class _PayFastState extends State<PayFast> {
   void _validate() {
     bool validURL =
         Uri.tryParse(widget.onsiteActivationScriptUrl)?.hasAbsolutePath ??
-            false;
+        false;
     if (!validURL || !widget.onsiteActivationScriptUrl.startsWith('https')) {
       throw Exception('onsiteActivationScriptUrl URL not valid');
     }
@@ -389,7 +407,7 @@ class _PayFastState extends State<PayFast> {
 
   /// A set of gesture recognizers used to handle touch gestures.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-    Factory(() => EagerGestureRecognizer())
+    Factory(() => EagerGestureRecognizer()),
   };
 
   /// get api endpoint
@@ -414,12 +432,20 @@ class _PayFastState extends State<PayFast> {
     String paramString = _dataToString(data);
 
     var response = await http.post(Uri.parse('$endpointUrl?$paramString'));
-
     if (response.statusCode == 200) {
       jsonResponse = jsonDecode(response.body);
     } else {
+      final regex = RegExp(r'<span\s+class="err-msg"\s*>(.*?)<\/span>');
+      final match = regex.firstMatch(response.body);
+      String? extracted = match?.group(1);
+
+      if (extracted != null) {
+        extracted = extracted.replaceAll(RegExp(r'<[^>]*>'), '');
+      }
+
       setState(() {
-        _showWebViewWidget = Html(data: response.body);
+        _errorMsg = extracted;
+        //_showWebViewWidget = Html(data: response.body);
       });
     }
 
@@ -479,11 +505,25 @@ class _PayFastState extends State<PayFast> {
   /// and resource errors.
   void _showWebView() async {
     var response = await _requestPaymentIdentifier();
+    if (_errorMsg != null) {
+      if (widget.onError != null) {
+        widget.onError!(_errorMsg!);
+        return;
+      }
+
+      setState(() {
+        _showWebViewWidget = _error(_errorMsg!, btnText: 'Retry');
+      });
+
+      return;
+    }
+
     if (response['uuid'] == null) {
       setState(() {
         _showWebViewWidget = _error(
-            'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.',
-            btnText: 'Retry');
+          'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.',
+          btnText: 'Retry',
+        );
       });
 
       return;
@@ -491,96 +531,107 @@ class _PayFastState extends State<PayFast> {
 
     paymentIdentifier = response['uuid'];
 
-    _controller = PlatformWebViewController(
-      AndroidWebViewControllerCreationParams(),
-    )
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setPlatformNavigationDelegate(
-        PlatformNavigationDelegate(
-          const PlatformNavigationDelegateCreationParams(),
-        )
-          ..setOnProgress ((int progress) {
-            if (progress < 100) {
-              setState(() {
-                _showSpinner = true;
-              });
-            } else {
-              setState(() {
-                _showSpinner = false;
-              });
-            }
-          })
-          ..setOnPageStarted ((String url) {})
-          ..setOnPageFinished((String url) {})
-          ..setOnWebResourceError ((WebResourceError error) {
-            debugPrint('''
+    _controller =
+        PlatformWebViewController(AndroidWebViewControllerCreationParams())
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setBackgroundColor(const Color(0x00000000))
+          ..setPlatformNavigationDelegate(
+            PlatformNavigationDelegate(
+                const PlatformNavigationDelegateCreationParams(),
+              )
+              ..setOnProgress((int progress) {
+                if (progress < 100) {
+                  setState(() {
+                    _showSpinner = true;
+                  });
+                } else {
+                  setState(() {
+                    _showSpinner = false;
+                  });
+                }
+              })
+              ..setOnPageStarted((String url) {})
+              ..setOnPageFinished((String url) {})
+              ..setOnWebResourceError((WebResourceError error) {
+                debugPrint('''
             Page resource error:
               code: ${error.errorCode}
               description: ${error.description}
               errorType: ${error.errorType}
               isForMainFrame: ${error.isForMainFrame}
             ''');
-          })
-          ..setOnNavigationRequest ((NavigationRequest request) async {
-            if (request.url.contains(Constants.completed)) {
-              var transactionData = widget.data;
-              transactionData['payment_uuid'] = paymentIdentifier;
-              transactionData['timestamp'] = DateTime.now().toIso8601String();
+              })
+              ..setOnNavigationRequest((NavigationRequest request) async {
+                if (request.url.contains(Constants.completed)) {
+                  var transactionData = widget.data;
+                  transactionData['payment_uuid'] = paymentIdentifier;
+                  transactionData['timestamp'] = DateTime.now()
+                      .toIso8601String();
 
-              setState(() {
-                _showWebViewWidget = PaymentCompleted(
-                  onPaymentCompleted: (_) => widget.onPaymentCompleted(transactionData),
-                  onPaymentCompletedText: widget.onPaymentCompletedText,
-                  shape: widget.onPaymentCompletedShapeBorder,
-                  paymentCompletedButtonText: widget.paymentCompletedButtonText,
-                  paymentCompletedTitle: widget.paymentCompletedTitle,
-                  child: widget.paymentCompletedWidget,
-                );
-              });
-              return NavigationDecision.prevent;
-            }else if (request.url.contains(Constants.closed)) {
-              setState(() {
-                _showWebViewWidget = PaymentCancelled(
-                  onPaymentCancelled: widget.onPaymentCancelled,
-                  onPaymentCancelledText: widget.onPaymentCancelledText,
-                  shape: widget.onPaymentCancelledShapeBorder,
-                  paymentCancelledButtonText: widget.paymentCancelledButtonText,
-                  paymentCancelledTitle: widget.paymentCancelledTitle,
-                  child: widget.paymentCancelledWidget,
-                );
-              });
-              return NavigationDecision.prevent;
-            }else{
-              setState(() {
-                _showWebViewWidget = _error(
-                    "Failed to get transaction status from the activation script. Ensure the script is configured properly.",
-                    btnText: 'Ok', 
-                    onTap: (){
-                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-                    }
-                );
-              });
-              return NavigationDecision.prevent;
-            }
+                  setState(() {
+                    _showWebViewWidget = PaymentCompleted(
+                      onPaymentCompleted: (_) =>
+                          widget.onPaymentCompleted(transactionData),
+                      onPaymentCompletedText: widget.onPaymentCompletedText,
+                      shape: widget.onPaymentCompletedShapeBorder,
+                      paymentCompletedButtonText:
+                          widget.paymentCompletedButtonText,
+                      paymentCompletedTitle: widget.paymentCompletedTitle,
+                      child: widget.paymentCompletedWidget,
+                    );
+                  });
+                  return NavigationDecision.prevent;
+                } else if (request.url.contains(Constants.closed)) {
+                  setState(() {
+                    _showWebViewWidget = PaymentCancelled(
+                      onPaymentCancelled: widget.onPaymentCancelled,
+                      onPaymentCancelledText: widget.onPaymentCancelledText,
+                      shape: widget.onPaymentCancelledShapeBorder,
+                      paymentCancelledButtonText:
+                          widget.paymentCancelledButtonText,
+                      paymentCancelledTitle: widget.paymentCancelledTitle,
+                      child: widget.paymentCancelledWidget,
+                    );
+                  });
+                  return NavigationDecision.prevent;
+                } else {
+                  setState(() {
+                    _showWebViewWidget = _error(
+                      "Failed to get transaction status from the activation script. Ensure the script is configured properly.",
+                      btnText: 'Ok',
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                        ).pushNamedAndRemoveUntil('/', (route) => false);
+                      },
+                    );
+                  });
+                  return NavigationDecision.prevent;
+                }
 
-            //return NavigationDecision.navigate;
-          })
-          ..setOnUrlChange ((UrlChange change) {
-            if (change.url != null) {}
-          }),
-      )
-      ..addJavaScriptChannel(JavaScriptChannelParams(
-        name: 'Toaster',
-        onMessageReceived: (JavaScriptMessage message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
+                //return NavigationDecision.navigate;
+              })
+              ..setOnUrlChange((UrlChange change) {
+                if (change.url != null) {}
+              }),
+          )
+          ..addJavaScriptChannel(
+            JavaScriptChannelParams(
+              name: 'Toaster',
+              onMessageReceived: (JavaScriptMessage message) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(message.message)));
+              },
+            ),
+          )
+          ..loadRequest(
+            LoadRequestParams(
+              uri: Uri.parse(
+                '${widget.onsiteActivationScriptUrl}?uuid=$paymentIdentifier',
+              ),
+            ),
           );
-        },
-      ))
-      ..loadRequest(LoadRequestParams (
-          uri : Uri.parse('${widget.onsiteActivationScriptUrl}?uuid=$paymentIdentifier')
-      ));
 
     // #docregion platform_features
     // if (controller.platform is AndroidWebViewController) {
@@ -599,7 +650,7 @@ class _PayFastState extends State<PayFast> {
   }
 
   /// Builds an error card widget with an error icon, message, and a button.
-  /// 
+  ///
   /// [message] - The error message to display.
   /// [btnText] - Optional custom text for the button. Defaults to 'Continue'.
   Widget _error(String message, {String? btnText, VoidCallback? onTap}) {
@@ -618,11 +669,7 @@ class _PayFastState extends State<PayFast> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 100,
-              ),
+              const Icon(Icons.error, color: Colors.red, size: 100),
               const SizedBox(height: 20),
               const Text(
                 'Error!',
@@ -636,10 +683,7 @@ class _PayFastState extends State<PayFast> {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 30),
               ElevatedButton(
@@ -653,16 +697,15 @@ class _PayFastState extends State<PayFast> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 15,
+                  ),
                   backgroundColor: Colors.red,
                 ),
                 child: Text(
                   btnText ?? 'Continue',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ],
@@ -675,70 +718,73 @@ class _PayFastState extends State<PayFast> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: widget.backgroundColor ?? Colors.transparent,
-        child: Column(
-          children: [
-            // Show spinner with AnimatedSwitcher
-            AnimatedSwitcher(
-              duration: widget.animatedSwitcherWidget?.getDuration() ??
+      color: widget.backgroundColor ?? Colors.transparent,
+      child: Column(
+        children: [
+          // Show spinner with AnimatedSwitcher
+          AnimatedSwitcher(
+            duration:
+                widget.animatedSwitcherWidget?.getDuration() ??
+                const Duration(milliseconds: 500),
+            transitionBuilder:
+                widget.animatedSwitcherWidget?.getTransitionBuilder() ??
+                (child, animation) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 1), // Start off-screen
+                      end: Offset.zero, // End on-screen
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
+            child: _showSpinner
+                ? WaitingOverlay(
+                    key: const ValueKey('WaitingOverlay'),
+                    child: widget.waitingOverlayWidget,
+                  )
+                : const SizedBox.shrink(),
+          ),
+
+          // Content Switcher for WebView or SummaryWidget
+          Expanded(
+            child: AnimatedSwitcher(
+              duration:
+                  widget.animatedSwitcherWidget?.getDuration() ??
                   const Duration(milliseconds: 500),
               transitionBuilder:
                   widget.animatedSwitcherWidget?.getTransitionBuilder() ??
-                      (child, animation) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0, 1), // Start off-screen
-                            end: Offset.zero, // End on-screen
-                          ).animate(animation),
-                          child: child,
-                        );
-                      },
-              child: _showSpinner
-                  ? WaitingOverlay(
-                      key: const ValueKey('WaitingOverlay'),
-                      child: widget.waitingOverlayWidget,
-                    )
-                  : const SizedBox.shrink(),
-            ),
-
-            // Content Switcher for WebView or SummaryWidget
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: widget.animatedSwitcherWidget?.getDuration() ??
-                    const Duration(milliseconds: 500),
-                transitionBuilder:
-                    widget.animatedSwitcherWidget?.getTransitionBuilder() ??
-                        (child, animation) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(0, 1), // Start off-screen
-                              end: Offset.zero, // End on-screen
-                            ).animate(animation),
-                            child: child,
-                          );
-                        },
-                child: _showWebViewWidget != null
-                    ? _showWebViewWidget!
-                    : SummaryWidget(
-                        key: const ValueKey('SummaryWidget'),
-                        paymentSummaryWidget: PaymentSummary(
-                          data: widget.data,
-                          title: widget.paymentSummaryTitle,
-                          icon: widget.defaultPaymentSummaryIcon,
-                          itemSectionLeadingWidget:
-                              widget.itemSummarySectionLeadingWidget,
-                          paymentSummaryAmountColor:
-                              widget.paymentSummaryAmountColor,
-                          child: widget.paymentSumarryWidget,
-                        ),
-                        onPayButtonPressed: _showWebView,
-                        payButtonStyle: widget.payButtonStyle,
-                        payButtonText: widget.payButtonText,
-                        payButtonLeadingWidget: widget.payButtonLeadingWidget,
+                  (child, animation) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, 1), // Start off-screen
+                        end: Offset.zero, // End on-screen
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+              child: _showWebViewWidget != null
+                  ? _showWebViewWidget!
+                  : SummaryWidget(
+                      key: const ValueKey('SummaryWidget'),
+                      paymentSummaryWidget: PaymentSummary(
+                        data: widget.data,
+                        title: widget.paymentSummaryTitle,
+                        icon: widget.defaultPaymentSummaryIcon,
+                        itemSectionLeadingWidget:
+                            widget.itemSummarySectionLeadingWidget,
+                        paymentSummaryAmountColor:
+                            widget.paymentSummaryAmountColor,
+                        child: widget.paymentSumarryWidget,
                       ),
-              ),
+                      onPayButtonPressed: _showWebView,
+                      payButtonStyle: widget.payButtonStyle,
+                      payButtonText: widget.payButtonText,
+                      payButtonLeadingWidget: widget.payButtonLeadingWidget,
+                    ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

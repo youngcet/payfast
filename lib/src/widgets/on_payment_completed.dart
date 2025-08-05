@@ -39,20 +39,22 @@ class PaymentCompleted extends StatelessWidget {
   /// The text displayed at the top of the screen.
   final String? paymentCompletedTitle;
 
-  const PaymentCompleted(
-      {super.key,
-      this.onPaymentCompletedText,
-      required this.onPaymentCompleted,
-      this.paymentCompletedButtonText,
-      this.paymentCompletedTitle,
-      this.child,
-      this.shape});
+  const PaymentCompleted({
+    super.key,
+    this.onPaymentCompletedText,
+    required this.onPaymentCompleted,
+    this.paymentCompletedButtonText,
+    this.paymentCompletedTitle,
+    this.child,
+    this.shape,
+  });
 
   @override
   Widget build(BuildContext context) {
     return child ??
         Card(
-          shape: shape ??
+          shape:
+              shape ??
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(
@@ -86,10 +88,7 @@ class PaymentCompleted extends StatelessWidget {
                     onPaymentCompletedText ??
                         'Thank you for your payment. Your transaction\nwas completed successfully.',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
@@ -98,15 +97,14 @@ class PaymentCompleted extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
+                        horizontal: 30,
+                        vertical: 15,
+                      ),
                       backgroundColor: Colors.green,
                     ),
                     child: Text(
                       paymentCompletedButtonText ?? 'Continue',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ],

@@ -4,7 +4,7 @@ import 'package:payfast/src/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 
-class PayFastApi {
+class PayFastUtils {
   /// payfast merchant id
   final String merchantId;
 
@@ -17,7 +17,7 @@ class PayFastApi {
   /// use sandbox/live
   final bool useSandBox;
 
-  PayFastApi({
+  PayFastUtils({
     required this.merchantId,
     required this.merchantKey,
     required this.useSandBox,

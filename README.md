@@ -42,7 +42,7 @@ A Flutter package to integrate Payfast payments into your app. **THIS PACKAGE DO
   * [Customizable Waiting Overlay Widget](#customizable-waiting-overlay-widget)
   * [FlutterFlow Integration](#flutterflow-integration)
   * [Customizable Animation](#customizable-animation)
-- [Errors](#errors)
+- [Handling And Understanding Errors](#handling-and-understanding-errors)
 - [Properties](#properties)
   * [passPhrase](#passphrase)
   * [useSandBox](#usesandbox)
@@ -793,9 +793,28 @@ PayFast(
 )
 ```
 
-## Errors
+## Handling And Understanding Errors
+### Payfast Errors
+You can now handle Payfast errors gracefully by using the `onError` callback. This callback is triggered when Payfast returns an error message.
+
+```dart
+PayFast(
+  onError: (errorMessage) {
+    print('Payfast Error: $errorMessage');
+
+    // Example: show a snackbar or alert dialog
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(errorMessage)),
+    );
+  },
+)
+```
+
+If the callback is not set, the default error page will be displayed.
+
+### Package Errors
 - Unable to generate a payment reference
-  - Possible causes include invalid merchant details or downtime on Payfast's servers.
+  - Possible cause, downtime on Payfast's servers.
 - Failed to get transaction status from the activation script
   - Caused by incorrect callbacks on the activation script.
 - This package does not support web

@@ -53,7 +53,8 @@ class PaymentCancelled extends StatelessWidget {
   Widget build(BuildContext context) {
     return child ??
         Card(
-          shape: shape ??
+          shape:
+              shape ??
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(
@@ -69,11 +70,7 @@ class PaymentCancelled extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Cancelled Icon
-                  const Icon(
-                    Icons.close,
-                    color: Colors.redAccent,
-                    size: 100,
-                  ),
+                  const Icon(Icons.close, color: Colors.redAccent, size: 100),
                   const SizedBox(height: 20),
                   Text(
                     paymentCancelledTitle ?? 'Payment Cancelled!',
@@ -88,10 +85,7 @@ class PaymentCancelled extends StatelessWidget {
                     onPaymentCancelledText ??
                         'Your payment was cancelled.\nNo charges were made, and your transaction\nwas not processed.\n\nPlease try again or contact support if you need assistance.',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
@@ -100,15 +94,14 @@ class PaymentCancelled extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
+                        horizontal: 30,
+                        vertical: 15,
+                      ),
                       backgroundColor: Colors.redAccent,
                     ),
                     child: Text(
                       paymentCancelledButtonText ?? 'Continue',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ],

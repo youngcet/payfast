@@ -37,14 +37,15 @@ class PaymentSummary extends StatelessWidget {
   /// Defaults blue.
   final Color? paymentSummaryAmountColor;
 
-  const PaymentSummary(
-      {super.key,
-      this.child,
-      required this.data,
-      this.icon,
-      this.title,
-      this.itemSectionLeadingWidget,
-      this.paymentSummaryAmountColor});
+  const PaymentSummary({
+    super.key,
+    this.child,
+    required this.data,
+    this.icon,
+    this.title,
+    this.itemSectionLeadingWidget,
+    this.paymentSummaryAmountColor,
+  });
 
   /// Builds the leading widget for the item section.
   ///
@@ -60,12 +61,9 @@ class PaymentSummary extends StatelessWidget {
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: icon ??
-              const Icon(
-                Icons.shopping_bag,
-                size: 50,
-                color: Colors.grey,
-              ),
+          child:
+              icon ??
+              const Icon(Icons.shopping_bag, size: 50, color: Colors.grey),
         );
   }
 
@@ -83,9 +81,9 @@ class PaymentSummary extends StatelessWidget {
         const SizedBox(height: 5),
         Text(
           description,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.normal,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.normal),
         ),
       ],
     );
@@ -98,15 +96,13 @@ class PaymentSummary extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product Details Section
-            Text(title ?? 'Payment Details:',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.bold)),
-            Divider(
-              thickness: 1,
-              color: Colors.grey.shade300,
+            Text(
+              title ?? 'Payment Details:',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
+            Divider(thickness: 1, color: Colors.grey.shade300),
             const SizedBox(height: 10),
             Card(
               shape: RoundedRectangleBorder(
@@ -123,17 +119,17 @@ class PaymentSummary extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${data['name_first']} ${data['name_last']}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold)),
+                          Text(
+                            '${data['name_first']} ${data['name_last']}',
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
                           const SizedBox(height: 5),
-                          Text(data['item_name'],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(fontWeight: FontWeight.normal)),
+                          Text(
+                            data['item_name'],
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(fontWeight: FontWeight.normal),
+                          ),
                           if (data['item_description'] != null)
                             _additionalText(context),
                         ],
@@ -151,16 +147,16 @@ class PaymentSummary extends StatelessWidget {
               children: [
                 Text(
                   'Total:',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   'R${data['amount']}',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: paymentSummaryAmountColor ?? Colors.blueAccent),
+                    fontWeight: FontWeight.bold,
+                    color: paymentSummaryAmountColor ?? Colors.blueAccent,
+                  ),
                 ),
               ],
             ),
