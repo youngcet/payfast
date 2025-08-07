@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:payfast/src/constants.dart';
 
 import 'payment_summary.dart';
 
@@ -59,22 +60,23 @@ class _SummaryPageState extends State<SummaryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: Constants.lightBackground,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.paymentSummaryWidget,
-          const Spacer(), // This pushes the button to the bottom of the screen
+          const Spacer(),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _isButtonPressed ? null : _processPayment,
-              style:
-                  widget.payButtonStyle ??
+              style: widget.payButtonStyle ??
                   ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Constants.redPrimary,
+                    shadowColor: Colors.transparent,
                   ),
               icon: _isButtonPressed
                   ? Container(
@@ -91,7 +93,7 @@ class _SummaryPageState extends State<SummaryWidget> {
                 widget.payButtonText ?? 'Pay Now',
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.normal,
                   color: Colors.white,
                 ),
               ),

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// A class that contains all the constant values related to the PayFast API and endpoints.
 ///
 /// This class holds static constant strings that are used across the application
@@ -22,6 +24,12 @@ class Constants {
   /// The endpoint for sandbox onsite payment processing with PayFast, used for testing.
   static const String onsitePaymentSandboxEndpoint =
       'https://sandbox.payfast.co.za/onsite/process';
+  
+  /// The endpoint for sandbox payment processing with PayFast, used for testing.
+  static const String paymentSandboxEndpoint = 'https://sandbox.payfast.co.za/eng/process';
+
+  /// The endpoint for payment processing with PayFast, used for live.
+  static const String paymentEndpoint = 'https://www.payfast.co.za/eng/process';
 
   static const String completed = 'completed';
   static const String closed = 'closed';
@@ -37,4 +45,9 @@ class Constants {
   ];
 
   static const String additionalText = 'additional_text';
+
+  static const Color darkBlue = Color(0xFF041B2B);
+  static const Color redPrimary = Color(0xFFC30017);
+  static const Color lightBackground = Color(0xFFF7F9FE);
+  static const Color semiTransparentColor = Color.fromRGBO(136, 151, 162, 0.2);
 }

@@ -57,7 +57,7 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 /// - **[paymentSumarryWidget]** *(Widget?)*: A customizable widget for displaying
 ///   the payment summary, such as item details and amounts.
 ///
-/// - **[onPaymentCompleted]** *(Function(Map<String, dynamic>))*: A callback function triggered when
+/// - **[onPaymentCompleted]** *(Function(Map))*: A callback function triggered when
 ///   the payment is successfully completed.
 ///
 /// - **[onPaymentCancelled]** *(Function)*: A callback function triggered when
@@ -94,7 +94,17 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 /// - **[paymentCompletedButtonText]** *(String?)*: The text displayed on the button (default text is continue).
 ///
 /// - **[paymentCompletedTitle]** *(String?)*: The text displayed at the top of the screen.
+/// 
+/// - **[summaryHeaderDecoration]** *(BoxDecoration?)*: Optional text style for the header section of the payment summary.
+/// 
+/// - **[summaryFooterDecoration]** *(BoxDecoration?)*: Optional text style for the header section of the payment summary.
+/// 
+/// - **[summaryHeaderStyle]** *(TextStyle?)*: Optional text style for the header section of the payment summary.
 ///
+/// - **[summaryFooterTotalTextStyle]** *(TextStyle?)*: Optional text style for the footer total text of the payment summary.
+/// 
+/// - **[summaryFooterAmountTextStyle]** *(TextStyle?)*: Optional text style for the footer amount section of the payment summary.
+/// 
 /// ### Example Usage
 ///
 /// ```dart
@@ -105,7 +115,7 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 ///     'merchant_id': '10000100',
 ///     'merchant_key': '46f0cd694581a',
 ///     'amount': '100.00',
-///     'item_name': 'Test Item',
+///     'item_name': 'TestItem',
 ///     // other required data...
 ///   },
 ///   onsiteActivationScriptUrl: 'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
@@ -289,6 +299,28 @@ class PayFast extends StatefulWidget {
   /// This function is executed after an error has occured from Payfast
   final Function(String)? onError;
 
+  /// Optional decoration for the payment summary header section.
+  /// This can be used to customize background color, borders, or padding
+  /// of the top area that typically contains the summary title or label.
+  final BoxDecoration? summaryHeaderDecoration;
+
+  /// Optional decoration for the payment summary footer section.
+  /// This allows styling the bottom area where actions like "Pay Now"
+  /// or total amount display might be placed.
+  final BoxDecoration? summaryFooterDecoration;
+
+  /// Optional style for the payment summary header section.
+  /// Use this to customize the header's background, borders, or other decoration.
+  final TextStyle? summaryHeaderStyle;
+
+  /// Optional style for the payment summary footer total section.
+  /// This can be used to style the footer area, such as setting background color or borders.
+  final TextStyle? summaryFooterTotalTextStyle;
+
+  /// Optional style for the payment summary footer amount section.
+  /// This can be used to style the footer area, such as setting background color or borders.
+  final TextStyle? summaryFooterAmountTextStyle;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -321,6 +353,11 @@ class PayFast extends StatefulWidget {
     this.paymentCancelledRoute,
     this.paymentCompletedRoute,
     this.onError,
+    this.summaryFooterDecoration,
+    this.summaryHeaderDecoration,
+    this.summaryHeaderStyle, 
+    this.summaryFooterTotalTextStyle, 
+    this.summaryFooterAmountTextStyle
   }) : assert(
          data.containsKey('merchant_id'),
          'Missing required key: merchant_id',
@@ -365,6 +402,12 @@ class _PayFastState extends State<PayFast> {
   // an error message string
   String? _errorMsg;
 
+  // cehck if payfast gateway is loaded
+  bool _isPayfastGatewayLoaded = false;
+
+  // check if payment was completed
+  bool _paymentHandled = false;
+
   @override
   void initState() {
     super.initState();
@@ -383,7 +426,7 @@ class _PayFastState extends State<PayFast> {
       });
       return;
     }
-
+    
     _validate();
   }
 
@@ -410,10 +453,15 @@ class _PayFastState extends State<PayFast> {
     Factory(() => EagerGestureRecognizer()),
   };
 
-  /// get api endpoint
+  /// get onsite payment api endpoint
   String get endpointUrl => (widget.useSandBox)
       ? Constants.onsitePaymentSandboxEndpoint
       : Constants.onsitePaymentLiveEndpoint;
+
+  /// get payment api endpoint
+  String get paymentEndpointUrl => (widget.useSandBox)
+      ? Constants.paymentSandboxEndpoint
+      : Constants.paymentEndpoint;
 
   /// Sends a request to the payment endpoint to obtain a payment identifier.
   ///
@@ -495,6 +543,30 @@ class _PayFastState extends State<PayFast> {
     paramString = paramString.substring(0, paramString.length - 1);
 
     return md5.convert(utf8.encode(paramString)).toString();
+  }
+
+  /// Displays a generic Payfast error message to the user.
+  ///
+  /// This method is called when the system is unable to generate a payment
+  /// reference — typically due to a temporary issue with the payment gateway.
+  ///
+  /// If an external error callback is provided via [widget.onError],
+  /// it will be invoked with the error message. Otherwise, the widget
+  /// will display an inline error message with a "Retry" button.
+  ///
+  /// The error message shown is:
+  /// _"Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable."_
+  void _showPayfastError(){
+    String error = 'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.';
+    if (widget.onError != null) {
+      widget.onError!(error);
+      return;
+    }
+
+    setState(() {
+      _showWebViewWidget = _error(error, btnText: 'Retry');
+    });
+    return;
   }
 
   /// Displays a WebView for processing payment.
@@ -774,6 +846,11 @@ class _PayFastState extends State<PayFast> {
                             widget.itemSummarySectionLeadingWidget,
                         paymentSummaryAmountColor:
                             widget.paymentSummaryAmountColor,
+                        summaryHeaderDecoration: widget.summaryHeaderDecoration,
+                        summaryFooterDecoration: widget.summaryFooterDecoration,
+                        summaryHeaderStyle: widget.summaryHeaderStyle,
+                        summaryFooterTotalTextStyle: widget.summaryFooterTotalTextStyle,
+                        summaryFooterAmountTextStyle: widget.summaryFooterAmountTextStyle,
                         child: widget.paymentSumarryWidget,
                       ),
                       onPayButtonPressed: _showWebView,

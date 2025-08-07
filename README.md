@@ -42,6 +42,9 @@ A Flutter package to integrate Payfast payments into your app. **THIS PACKAGE DO
   * [Customizable Waiting Overlay Widget](#customizable-waiting-overlay-widget)
   * [FlutterFlow Integration](#flutterflow-integration)
   * [Customizable Animation](#customizable-animation)
+- [Recurring Billing](#recurringbilling)
+  * [Subscriptions](#subscriptions)
+  * [Tokenization](#tokenization)
 - [Handling And Understanding Errors](#handling-and-understanding-errors)
 - [Properties](#properties)
   * [passPhrase](#passphrase)
@@ -67,11 +70,14 @@ A Flutter package to integrate Payfast payments into your app. **THIS PACKAGE DO
   * [paymentCancelledButtonText](#paymentcancelledbuttontext)
   * [paymentCompletedButtonText](#paymentcompletedbuttontext)
   * [paymentCompletedTitle](#paymentcompletedtitle)
-
+  * [summaryHeaderDecoration](#summaryheaderdecoration)
+  * [summaryHeaderStyle](#summaryheaderstyle)
+  * [summaryFooterTotalTextStyle](#summaryfootertotaltextstyle)
+  * [summaryFooterAmountTextStyle](#summaryfooteramounttextstyle)
 
 ## Getting Started
 
-This package uses Payfast's Onsite Payments integration, therefore, you need to host their onsite activiation script. 
+This package uses Payfast's Onsite Payments integration, therefore, you need to host their onsite activation script. 
 
 ## Payfast Onsite Activation Script
 
@@ -290,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 'email_address': 'username@domain.com', // email address
                 'm_payment_id': '7663668635664', // payment id
                 'amount': '50', // amount
-                'item_name': '#0000002', // item name (should be one word, no spaces)
+                'item_name': 'Subscription', // item name (SHOULD BE ONE WORD, NO SPACES)
             }, 
             passPhrase: 'xxxxxxxxxxxxxxx',  // Your payfast passphrase
             useSandBox: true, // true to use Payfast sandbox, false to use their live server
@@ -316,11 +322,11 @@ The code above will show you the screen below:
 
 ### Onsite Payments
 
-Integrate PayFast's secure payment engine directly into the checkout page. Important: Please note that this is currently in Beta according to PayFast's documentation, however, it works fine.
+Integrate PayFast's secure payment engine directly into the checkout page.
 
 ### Sandbox or Live Environment integration
 
-Configure whether to use PayFast's sandbox or live server. When you choose to use the sandbox or live server, ensure that the hosted `html` file also points to the server's onsite activation script (`<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>`) and the PayFast merchant id and key corresponds to the appropiate server.
+Configure whether to use PayFast's sandbox or live server. When you choose to use the sandbox or live server, ensure that the hosted `html` file also points to the server's onsite activation script (`<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>`) and the PayFast merchant id and key corresponds to the appropriate server.
 
 ```dart
 PayFast(
@@ -793,6 +799,143 @@ PayFast(
 )
 ```
 
+## Recurring Billing
+Payfast Recurring Billing enables automated scheduled payments for subscriptions, donations, and installment-based services. There are two types of recurring payments: Subscriptions and Tokenization. You can read more about recurring payments on Payfast's offial [documentation](https://developers.payfast.co.za/docs#recurring_billing).
+
+### Subscriptions
+A subscription is a recurring payment that is automatically charged on a scheduled date. To setup a recurring subscription payment, add the required fields in the data object.
+```dart
+PayFast(
+  data: {
+    'merchant_id': '0000000', // your payfast merchant id
+    'merchant_key': 'xxxxxxxxx', // your payfast merchant key
+    'name_first': 'Yung',
+    'name_last': 'Cet',
+    'email_address': 'yungcet@permanentlink.co.za',
+    'm_payment_id': DateTime.now().millisecondsSinceEpoch.toString(),
+    'amount': '20',
+    'item_name': 'Subscription',
+    // subscription fields
+    'subscription_type': '1',
+    'billing_date': '2020-01-01', // optional
+    'recurring_amount': '123.45', // optional
+    'frequency': '3',
+    'cycles': '12',
+    'subscription_notify_email': 'true', // optional
+    'subscription_notify_webhook': 'true', // optional
+    'subscription_notify_buyer': 'true' // optional
+  },
+  ...
+), 
+```
+
+#### Subscription Fields
+> **Note:** Fields marked as **REQUIRED FOR SUBSCRIPTIONS** must be included when creating a subscription.
+
+---
+
+#### `subscription_type` *(int)*  
+```dart
+subscription_type = 1; // REQUIRED FOR SUBSCRIPTIONS - sets payment as a subscription
+```
+
+---
+
+#### `billing_date` *(date in `YYYY-MM-DD`)*  
+```dart
+billing_date = "2020-01-01"; // OPTIONAL - date future payments start, defaults to current date if omitted
+```
+
+---
+
+#### `recurring_amount` *(decimal)*  
+```dart
+recurring_amount = 123.45; // OPTIONAL - recurring charge amount in ZAR, minimum 5.00, defaults to 'amount' if unset
+```
+> You can set `recurring_amount = 0.00` for free trials or tokenization (card setup) payments.
+
+---
+
+#### `frequency` *(int)*  
+```dart
+frequency = 3; // REQUIRED FOR SUBSCRIPTIONS - billing cycle frequency
+```
+
+| Value | Frequency  |
+|-------|------------|
+| 1     | Daily      |
+| 2     | Weekly     |
+| 3     | Monthly    |
+| 4     | Quarterly  |
+| 5     | Biannually |
+| 6     | Annually   |
+
+---
+
+#### `cycles` *(int)*  
+```dart
+cycles = 12; // REQUIRED FOR SUBSCRIPTIONS - number of billing cycles, 0 = indefinite
+```
+
+---
+
+#### Notifications (Optional)
+
+#### `subscription_notify_email` *(bool)*  
+```dart
+subscription_notify_email = true; // Send email notification to merchant before trial ends or price changes
+```
+
+#### `subscription_notify_webhook` *(bool)*  
+```dart
+subscription_notify_webhook = true; // Send webhook notification to merchant before trial ends or price changes
+```
+
+#### `subscription_notify_buyer` *(bool)*  
+```dart
+subscription_notify_buyer = true; // Send email notification to buyer before trial ends or price changes
+```
+---
+
+**All notification settings can be modified in the Payfast dashboard under:**  
+`Settings → Recurring Billing`
+
+### Tokenization
+A recurring charge where the future dates and amounts of payments may be unknown.
+Payfast will only charge the customer's card when instructed to do so via the API.
+
+To setup a recurring tokenization payment, add the required field/s in the data object.
+```dart
+PayFast(
+  data: {
+    'merchant_id': '0000000', // your payfast merchant id
+    'merchant_key': 'xxxxxxxxx', // your payfast merchant key
+    'name_first': 'Yung',
+    'name_last': 'Cet',
+    'email_address': 'yungcet@permanentlink.co.za',
+    'm_payment_id': DateTime.now().millisecondsSinceEpoch.toString(),
+    'amount': '20',
+    'item_name': 'Subscription',
+    // subscription fields
+    'subscription_type': '2',
+  },
+  ...
+), 
+```
+
+#### Tokenization Field/s
+> **Note:** Fields marked as **REQUIRED FOR SUBSCRIPTIONS** must be included when creating a subscription.
+
+---
+
+#### `subscription_type` *(int)*  
+```dart
+subscription_type = 1; // REQUIRED FOR SUBSCRIPTIONS - sets payment as a subscription
+```
+
+Subscriptions can be edited, paused and cancelled either via the Payfast dashboard or the API. Refer to Payfast's official [documentation](https://developers.payfast.co.za/docs#recurring_functionality) for more information.
+
+
 ## Handling And Understanding Errors
 ### Payfast Errors
 You can now handle Payfast errors gracefully by using the `onError` callback. This callback is triggered when Payfast returns an error message.
@@ -947,6 +1090,21 @@ An optional text displayed on the button on the payment completed screen (defaul
 
 ### `paymentCompletedTitle`
 An optional text displayed at the top of the payment completed screen.
+
+### `summaryHeaderDecoration`
+Optional decoration for the payment summary header section.
+
+### `summaryFooterDecoration`
+Optional decoration for the payment summary footer section.
+
+### `summaryHeaderStyle`
+Optional style for the payment summary header section.
+
+### `summaryFooterTotalTextStyle`
+Optional style for the payment summary footer total section.
+
+### `summaryFooterAmountTextStyle`
+Optional style for the payment summary footer amount section.
 
 
 ## Conclusion
