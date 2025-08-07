@@ -42,7 +42,7 @@ A Flutter package to integrate Payfast payments into your app. **THIS PACKAGE DO
   * [Customizable Waiting Overlay Widget](#customizable-waiting-overlay-widget)
   * [FlutterFlow Integration](#flutterflow-integration)
   * [Customizable Animation](#customizable-animation)
-- [Recurring Billing](#recurringbilling)
+- [Recurring Billing](#recurring-billing)
   * [Subscriptions](#subscriptions)
   * [Tokenization](#tokenization)
 - [Handling And Understanding Errors](#handling-and-understanding-errors)
@@ -832,29 +832,21 @@ PayFast(
 #### Subscription Fields
 > **Note:** Fields marked as **REQUIRED FOR SUBSCRIPTIONS** must be included when creating a subscription.
 
----
-
 #### `subscription_type` *(int)*  
 ```dart
 subscription_type = 1; // REQUIRED FOR SUBSCRIPTIONS - sets payment as a subscription
 ```
-
----
 
 #### `billing_date` *(date in `YYYY-MM-DD`)*  
 ```dart
 billing_date = "2020-01-01"; // OPTIONAL - date future payments start, defaults to current date if omitted
 ```
 
----
-
 #### `recurring_amount` *(decimal)*  
 ```dart
 recurring_amount = 123.45; // OPTIONAL - recurring charge amount in ZAR, minimum 5.00, defaults to 'amount' if unset
 ```
 > You can set `recurring_amount = 0.00` for free trials or tokenization (card setup) payments.
-
----
 
 #### `frequency` *(int)*  
 ```dart
@@ -870,14 +862,10 @@ frequency = 3; // REQUIRED FOR SUBSCRIPTIONS - billing cycle frequency
 | 5     | Biannually |
 | 6     | Annually   |
 
----
-
 #### `cycles` *(int)*  
 ```dart
 cycles = 12; // REQUIRED FOR SUBSCRIPTIONS - number of billing cycles, 0 = indefinite
 ```
-
----
 
 #### Notifications (Optional)
 
@@ -895,7 +883,6 @@ subscription_notify_webhook = true; // Send webhook notification to merchant bef
 ```dart
 subscription_notify_buyer = true; // Send email notification to buyer before trial ends or price changes
 ```
----
 
 **All notification settings can be modified in the Payfast dashboard under:**  
 `Settings → Recurring Billing`
