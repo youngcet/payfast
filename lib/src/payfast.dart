@@ -472,6 +472,7 @@ class _PayFastState extends State<PayFast> {
     Map<String, dynamic> jsonResponse = {};
 
     Map<String, dynamic> data = Map.from(widget.data);
+    data['item_name'] = data['item_name'].replaceAll(' ', '');
     data['passphrase'] = widget.passPhrase;
 
     var signature = _generateSignature(data);

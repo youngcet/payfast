@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:payfast/src/constants.dart';
 
 /// A widget that displays a loading overlay with a progress indicator.
 ///
@@ -27,7 +28,7 @@ class WaitingOverlay extends StatelessWidget {
             const SizedBox(height: 100),
             const Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.redAccent,
+                backgroundColor: Constants.redPrimary,
                 color: Colors.white,
               ),
             ),
@@ -36,7 +37,7 @@ class WaitingOverlay extends StatelessWidget {
               'Please wait...',
               style: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.normal),
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.normal, color: Constants.darkBlue),
             ),
           ],
         );
