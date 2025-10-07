@@ -181,7 +181,6 @@ class PaymentSummary extends StatelessWidget {
                   ),
                 ),
               ),
-              const Divider(height: 0.1, color: Colors.white,),
               Container(
                 width: double.infinity,
                 //color: Colors.white,

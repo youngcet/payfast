@@ -133,16 +133,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         backgroundColor: Colors.white,
                         builder: (context) => PayFast(
                           data: {
-                            'merchant_id': '000000',
-                            'merchant_key': 'xxxxxxx',
+                            'merchant_id': '00000000',
+                            'merchant_key': 'xxxxxxxxx',
                             'name_first': 'Yung',
                             'name_last': 'Cet',
-                            'email_address': 'test@test.com',
+                            'email_address': 'yungcet@permanentlink.co.za',
                             'm_payment_id': DateTime.now().millisecondsSinceEpoch.toString(),
                             'amount': '20',
-                            'item_name': 'TestItem',
+                            'item_name': 'Subscription',
                           },
-                          passPhrase: 'xxxxx',
+                          passPhrase: 'xxxxxxx',
                           useSandBox: true,
                           onsiteActivationScriptUrl:
                               'https://youngcet.github.io/sandbox_payfast_onsite_payments/',

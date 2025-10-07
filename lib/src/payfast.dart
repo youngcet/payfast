@@ -12,11 +12,11 @@ import 'package:payfast/src/widgets/on_payment_completed.dart';
 import 'package:payfast/src/widgets/payment_summary.dart';
 import 'package:payfast/src/widgets/summary_widget.dart';
 import 'package:payfast/src/widgets/waiting_overlay.dart';
-import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 // #docregion platform_imports
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 /// The `PayFast` class is a stateful widget designed to integrate
 /// PayFast's payment processing system into a Flutter application.
@@ -402,12 +402,6 @@ class _PayFastState extends State<PayFast> {
   // an error message string
   String? _errorMsg;
 
-  // cehck if payfast gateway is loaded
-  bool _isPayfastGatewayLoaded = false;
-
-  // check if payment was completed
-  bool _paymentHandled = false;
-
   @override
   void initState() {
     super.initState();
@@ -545,30 +539,6 @@ class _PayFastState extends State<PayFast> {
     return md5.convert(utf8.encode(paramString)).toString();
   }
 
-  /// Displays a generic Payfast error message to the user.
-  ///
-  /// This method is called when the system is unable to generate a payment
-  /// reference — typically due to a temporary issue with the payment gateway.
-  ///
-  /// If an external error callback is provided via [widget.onError],
-  /// it will be invoked with the error message. Otherwise, the widget
-  /// will display an inline error message with a "Retry" button.
-  ///
-  /// The error message shown is:
-  /// _"Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable."_
-  void _showPayfastError(){
-    String error = 'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.';
-    if (widget.onError != null) {
-      widget.onError!(error);
-      return;
-    }
-
-    setState(() {
-      _showWebViewWidget = _error(error, btnText: 'Retry');
-    });
-    return;
-  }
-
   /// Displays a WebView for processing payment.
   ///
   /// The WebView loads a payment page using the unique identifier (`uuid`)
@@ -653,7 +623,9 @@ class _PayFastState extends State<PayFast> {
                     );
                   });
                   return NavigationDecision.prevent;
-                } else if (request.url.contains(Constants.closed)) {
+                } 
+                
+                if (request.url.contains(Constants.closed)) {
                   setState(() {
                     _showWebViewWidget = PaymentCancelled(
                       onPaymentCancelled: widget.onPaymentCancelled,
@@ -666,22 +638,9 @@ class _PayFastState extends State<PayFast> {
                     );
                   });
                   return NavigationDecision.prevent;
-                } else {
-                  setState(() {
-                    _showWebViewWidget = _error(
-                      "Failed to get transaction status from the activation script. Ensure the script is configured properly.",
-                      btnText: 'Ok',
-                      onTap: () {
-                        Navigator.of(
-                          context,
-                        ).pushNamedAndRemoveUntil('/', (route) => false);
-                      },
-                    );
-                  });
-                  return NavigationDecision.prevent;
-                }
+                } 
 
-                //return NavigationDecision.navigate;
+                return NavigationDecision.navigate;
               })
               ..setOnUrlChange((UrlChange change) {
                 if (change.url != null) {}
