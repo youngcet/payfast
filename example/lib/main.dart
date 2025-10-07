@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             'email_address': 'yungcet@permanentlink.co.za',
                             'm_payment_id': DateTime.now().millisecondsSinceEpoch.toString(),
                             'amount': '20',
-                            'item_name': 'Test Item',
+                            'item_name': 'Subscription',
                           },
                           passPhrase: 'xxxxxxx',
                           useSandBox: true,

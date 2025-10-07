@@ -1,3 +1,8 @@
+## 1.0.1
+### Updated
+
+- fixed IOS `PlatformNavigationDelegate` issue
+
 ## 1.0.0
 ### Updated
 
