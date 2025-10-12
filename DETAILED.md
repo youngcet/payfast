@@ -416,6 +416,11 @@ Optional style for the payment summary footer total section.
 ### `summaryFooterAmountTextStyle`
 Optional style for the payment summary footer amount section.
 
+### `useSwipeToPay`
 
+This property enables a **swipe-to-confirm** payment action instead of a simple "Pay Now" button tap.
+
+### `paymentSummaryBuilder`
+Use `paymentSummaryBuilder` to dynamically build your payment summary widget instead of modifying parts of the default one.
 
 ---
