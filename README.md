@@ -8,8 +8,8 @@
 
 ---
 <p align="center">
-  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo.gif?raw=true" height="600px">
-  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo_live.gif?raw=true" height="600px">
+  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo.gif?raw=true" height="600px" style="border: 1px solid #ddd">
+  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo_live.gif?raw=true" height="600px" style="border: 1px solid #ddd">
 </p>
 
 ---
@@ -315,6 +315,10 @@ PayFast(
   onError: (msg) => print('Error: $msg'),
 );
 ```
+
+## Documentation
+
+[Click here to view the detailed documentation](https://github.com/youngcet/payfast/blob/main/DETAILED.md).
 
 ---
 
