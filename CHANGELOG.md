@@ -1,3 +1,13 @@
+## 1.0.2
+- Introduced new payment summary builder
+- Added `useSwipeToPay` property for swipe confirmation
+- Bug fixes and performance improvements
+
+## 1.2.0-pre.1 = 1.0.2-pre.1
+- Introduced new payment summary builder
+- Added `useSwipeToPay` property for swipe confirmation
+- Bug fixes and performance improvements
+
 ## 1.0.1
 ### Updated
 

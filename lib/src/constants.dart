@@ -24,12 +24,19 @@ class Constants {
   /// The endpoint for sandbox onsite payment processing with PayFast, used for testing.
   static const String onsitePaymentSandboxEndpoint =
       'https://sandbox.payfast.co.za/onsite/process';
-  
+
   /// The endpoint for sandbox payment processing with PayFast, used for testing.
-  static const String paymentSandboxEndpoint = 'https://sandbox.payfast.co.za/eng/process';
+  static const String paymentSandboxEndpoint =
+      'https://sandbox.payfast.co.za/eng/process';
 
   /// The endpoint for payment processing with PayFast, used for live.
   static const String paymentEndpoint = 'https://www.payfast.co.za/eng/process';
+
+  static const String ipnEndpoint =
+      'https://www.payfast.co.za/eng/query/validate';
+
+  static const String sandboxIpnEndpoint =
+      'https://sandbox.payfast.co.za/eng/query/validate';
 
   static const String completed = 'completed';
   static const String closed = 'closed';

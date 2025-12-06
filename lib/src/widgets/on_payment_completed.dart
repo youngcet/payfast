@@ -53,13 +53,15 @@ class PaymentCompleted extends StatelessWidget {
   Widget build(BuildContext context) {
     return child ??
         Card(
+          elevation: 0,
+          color: Colors.white,
           shape:
               shape ??
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(
-                  color: Colors.green,
-                  width: 1, // Border width
+                  color: Colors.white,
+                  width: 0, // Border width
                 ),
               ),
           child: Padding(

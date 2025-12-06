@@ -94,17 +94,17 @@ import 'package:webview_flutter_platform_interface/webview_flutter_platform_inte
 /// - **[paymentCompletedButtonText]** *(String?)*: The text displayed on the button (default text is continue).
 ///
 /// - **[paymentCompletedTitle]** *(String?)*: The text displayed at the top of the screen.
-/// 
+///
 /// - **[summaryHeaderDecoration]** *(BoxDecoration?)*: Optional text style for the header section of the payment summary.
-/// 
+///
 /// - **[summaryFooterDecoration]** *(BoxDecoration?)*: Optional text style for the header section of the payment summary.
-/// 
+///
 /// - **[summaryHeaderStyle]** *(TextStyle?)*: Optional text style for the header section of the payment summary.
 ///
 /// - **[summaryFooterTotalTextStyle]** *(TextStyle?)*: Optional text style for the footer total text of the payment summary.
-/// 
+///
 /// - **[summaryFooterAmountTextStyle]** *(TextStyle?)*: Optional text style for the footer amount section of the payment summary.
-/// 
+///
 /// ### Example Usage
 ///
 /// ```dart
@@ -132,6 +132,13 @@ import 'package:webview_flutter_platform_interface/webview_flutter_platform_inte
 /// - Ensure all required fields are present in the `data` map,
 ///   including `merchant_id`, `merchant_key`, `amount`, and `item_name`.
 /// - The onsite activation script URL must be valid and use HTTPS.
+
+typedef PaymentSummaryBuilder =
+    Widget Function(
+      BuildContext context,
+      Map<String, dynamic> data,
+      VoidCallback processPayment,
+    );
 
 class PayFast extends StatefulWidget {
   /// The passphrase associated with your PayFast account.
@@ -321,6 +328,37 @@ class PayFast extends StatefulWidget {
   /// This can be used to style the footer area, such as setting background color or borders.
   final TextStyle? summaryFooterAmountTextStyle;
 
+  /// Optional builder for a custom payment summary page.
+  ///
+  /// If provided, this function will be called to build the payment summary UI.
+  /// It gives you access to the `BuildContext`, the `data` map containing the
+  /// payment information, and a `processPayment` callback to trigger the PayFast
+  /// payment flow.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// paymentSummaryBuilder: (context, data, processPayment) {
+  ///   return Column(
+  ///     children: [
+  ///       Text('Custom Summary'),
+  ///       Text(data['item_name']),
+  ///       Text('Amount: ${data['amount']}'),
+  ///       ElevatedButton(
+  ///         onPressed: processPayment,
+  ///         child: Text('Pay Now'),
+  ///       ),
+  ///     ],
+  ///   );
+  /// }
+  /// ```
+  final PaymentSummaryBuilder? paymentSummaryBuilder;
+
+  /// Whether to use the **slide-to-pay** gesture instead of a button.
+  ///
+  /// Defaults to `true`. If set to `true`, users must
+  /// slide the handle from left to right to initiate payment.
+  final bool useSwipeToPay;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -355,9 +393,11 @@ class PayFast extends StatefulWidget {
     this.onError,
     this.summaryFooterDecoration,
     this.summaryHeaderDecoration,
-    this.summaryHeaderStyle, 
-    this.summaryFooterTotalTextStyle, 
-    this.summaryFooterAmountTextStyle
+    this.summaryHeaderStyle,
+    this.summaryFooterTotalTextStyle,
+    this.summaryFooterAmountTextStyle,
+    this.paymentSummaryBuilder,
+    this.useSwipeToPay = true,
   }) : assert(
          data.containsKey('merchant_id'),
          'Missing required key: merchant_id',
@@ -420,8 +460,13 @@ class _PayFastState extends State<PayFast> {
       });
       return;
     }
-    
+
     _validate();
+  }
+
+  // Handles the payment process by displaying the WebView.
+  Future<void> _processPayment() async {
+    _loadPayFastPaymentEngine();
   }
 
   /// Validates specific fields to ensure they meet required criteria.
@@ -545,7 +590,7 @@ class _PayFastState extends State<PayFast> {
   /// retrieved from the payment system. It also handles navigation events,
   /// including tracking loading progress, completed or cancelled payments,
   /// and resource errors.
-  void _showWebView() async {
+  void _loadPayFastPaymentEngine() async {
     var response = await _requestPaymentIdentifier();
     if (_errorMsg != null) {
       if (widget.onError != null) {
@@ -623,8 +668,8 @@ class _PayFastState extends State<PayFast> {
                     );
                   });
                   return NavigationDecision.prevent;
-                } 
-                
+                }
+
                 if (request.url.contains(Constants.closed)) {
                   setState(() {
                     _showWebViewWidget = PaymentCancelled(
@@ -638,7 +683,7 @@ class _PayFastState extends State<PayFast> {
                     );
                   });
                   return NavigationDecision.prevent;
-                } 
+                }
 
                 return NavigationDecision.navigate;
               })
@@ -746,6 +791,39 @@ class _PayFastState extends State<PayFast> {
     );
   }
 
+  // Build the summary widget, either using a custom builder or the default SummaryWidget.
+  Widget _summaryWidget() {
+    if (widget.paymentSummaryBuilder != null) {
+      return widget.paymentSummaryBuilder!(
+        context,
+        widget.data,
+        _processPayment,
+      );
+    }
+
+    return SummaryWidget(
+      key: const ValueKey('SummaryWidget'),
+      paymentSummaryWidget: PaymentSummary(
+        data: widget.data,
+        title: widget.paymentSummaryTitle,
+        icon: widget.defaultPaymentSummaryIcon,
+        itemSectionLeadingWidget: widget.itemSummarySectionLeadingWidget,
+        paymentSummaryAmountColor: widget.paymentSummaryAmountColor,
+        summaryHeaderDecoration: widget.summaryHeaderDecoration,
+        summaryFooterDecoration: widget.summaryFooterDecoration,
+        summaryHeaderStyle: widget.summaryHeaderStyle,
+        summaryFooterTotalTextStyle: widget.summaryFooterTotalTextStyle,
+        summaryFooterAmountTextStyle: widget.summaryFooterAmountTextStyle,
+        child: widget.paymentSumarryWidget,
+      ),
+      onPayButtonPressed: _loadPayFastPaymentEngine,
+      payButtonStyle: widget.payButtonStyle,
+      payButtonText: widget.payButtonText,
+      payButtonLeadingWidget: widget.payButtonLeadingWidget,
+      useSwipeToPay: widget.useSwipeToPay,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -762,8 +840,8 @@ class _PayFastState extends State<PayFast> {
                 (child, animation) {
                   return SlideTransition(
                     position: Tween<Offset>(
-                      begin: const Offset(0, 1), // Start off-screen
-                      end: Offset.zero, // End on-screen
+                      begin: const Offset(0, 1),
+                      end: Offset.zero,
                     ).animate(animation),
                     child: child,
                   );
@@ -787,36 +865,15 @@ class _PayFastState extends State<PayFast> {
                   (child, animation) {
                     return SlideTransition(
                       position: Tween<Offset>(
-                        begin: const Offset(0, 1), // Start off-screen
-                        end: Offset.zero, // End on-screen
+                        begin: const Offset(0, 1),
+                        end: Offset.zero,
                       ).animate(animation),
                       child: child,
                     );
                   },
               child: _showWebViewWidget != null
                   ? _showWebViewWidget!
-                  : SummaryWidget(
-                      key: const ValueKey('SummaryWidget'),
-                      paymentSummaryWidget: PaymentSummary(
-                        data: widget.data,
-                        title: widget.paymentSummaryTitle,
-                        icon: widget.defaultPaymentSummaryIcon,
-                        itemSectionLeadingWidget:
-                            widget.itemSummarySectionLeadingWidget,
-                        paymentSummaryAmountColor:
-                            widget.paymentSummaryAmountColor,
-                        summaryHeaderDecoration: widget.summaryHeaderDecoration,
-                        summaryFooterDecoration: widget.summaryFooterDecoration,
-                        summaryHeaderStyle: widget.summaryHeaderStyle,
-                        summaryFooterTotalTextStyle: widget.summaryFooterTotalTextStyle,
-                        summaryFooterAmountTextStyle: widget.summaryFooterAmountTextStyle,
-                        child: widget.paymentSumarryWidget,
-                      ),
-                      onPayButtonPressed: _showWebView,
-                      payButtonStyle: widget.payButtonStyle,
-                      payButtonText: widget.payButtonText,
-                      payButtonLeadingWidget: widget.payButtonLeadingWidget,
-                    ),
+                  : _summaryWidget(),
             ),
           ),
         ],
